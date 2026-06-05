@@ -1,4 +1,4 @@
-const { nativeFieldsAndData, regularVals, parseBoolean } = require('./mapper');
+const { nativeFieldsAndData, regularVals } = require('./mapper');
 const { simplifyError } = require('./errors');
 
 async function importSheetBatch({ odoo, sheet, model, rows, mode = 'normal', options = {} }) {
@@ -164,11 +164,11 @@ async function importFieldsFast({ odoo, sheet, model, rows, options }) {
         name: row.name,
         field_description: row.field_description || row.name,
         ttype: row.ttype || 'char',
-        required: parseBoolean(row.required, false),
-        readonly: parseBoolean(row.readonly, false),
-        store: row.store === '' ? true : parseBoolean(row.store, true),
-        index: parseBoolean(row.index, false),
-        copied: row.copied === '' ? true : parseBoolean(row.copied, true),
+        required: !!row.required,
+        readonly: !!row.readonly,
+        store: row.store === '' ? true : !!row.store,
+        index: !!row.index,
+        copied: row.copied === '' ? true : !!row.copied,
         state: row.state || 'manual',
         help: row.help || ''
       };

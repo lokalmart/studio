@@ -31,18 +31,6 @@ function preflightWorkbook(fileBase64) {
       }
     }
 
-    // Jika XLSX parser menemukan boolean asli, mode Super Cepat akan mengubahnya
-    // menjadi teks TRUE/FALSE sebelum Odoo load(). Tetap beri warning agar pembuat
-    // XLSX tahu bahwa sel boolean sebaiknya ditulis sebagai teks sejak awal.
-    for (const row of s.rows) {
-      for (const [key, value] of Object.entries(row)) {
-        if (key === '__rownum') continue;
-        if (typeof value === 'boolean') {
-          warnings.push({ sheet: s.name, row: row.__rownum, message: `Nilai boolean terdeteksi pada kolom ${key}. Mode Super Cepat akan mengonversi ke teks TRUE/FALSE untuk mencegah error bool has no lower.` });
-        }
-      }
-    }
-
     if (model === 'product.template') {
       for (const row of s.rows) {
         if (!row.name) errors.push({ sheet: s.name, row: row.__rownum, message: 'product.template wajib punya name.' });

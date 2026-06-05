@@ -10,13 +10,11 @@ function workbookFromBase64(fileBase64) {
 function normalizeValue(value) {
   if (value === undefined || value === null) return '';
   if (typeof value === 'string') {
-    // Keep boolean-looking text as text here.
-    // Normal mode converts it later via convertRegularScalar(),
-    // while Super Cepat/load() must receive strings such as 1/0 or TRUE/FALSE.
-    return value.trim();
+    const s = value.trim();
+    if (/^(true|TRUE|yes|YES|Ya|ya)$/i.test(s)) return true;
+    if (/^(false|FALSE|no|NO|Tidak|tidak)$/i.test(s)) return false;
+    return s;
   }
-  // Some XLSX libraries may still expose boolean cells as real booleans.
-  // Keep them for regular mode; mapper.convertNativeScalar() will stringify them for load().
   return value;
 }
 

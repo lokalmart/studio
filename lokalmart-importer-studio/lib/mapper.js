@@ -5,37 +5,11 @@ function isEmpty(v) {
   return v === undefined || v === null || String(v).trim() === '';
 }
 
-function parseBoolean(value, defaultValue = false) {
-  if (value === true) return true;
-  if (value === false) return false;
-  if (value === undefined || value === null || value === '') return defaultValue;
-  const s = String(value).trim().toLowerCase();
-  if (['true', '1', 'yes', 'y', 'ya', 'iya', 'benar', 'on'].includes(s)) return true;
-  if (['false', '0', 'no', 'n', 'tidak', 'tdk', 'salah', 'off'].includes(s)) return false;
-  return defaultValue;
-}
-
-function convertRegularScalar(v) {
+function convertScalar(v) {
   if (v === true || v === false) return v;
   if (isEmpty(v)) return '';
   const s = String(v).trim();
-  if (/^(true|false|yes|no|ya|iya|tidak|tdk)$/i.test(s)) return parseBoolean(s, false);
   if (/^-?\d+(\.\d+)?$/.test(s) && !/^0\d+/.test(s)) return Number(s);
-  return s;
-}
-
-// Native Odoo import via model.load(fields, data) follows the same spirit as Odoo's
-// UI import: values are parsed from strings. Sending real JS booleans can trigger
-// Odoo's boolean converter error: value.lower is not a function / bool has no lower.
-// Therefore Super Fast mode must send strings for booleans, dates, selections, and
-// even numbers are safest as strings. Empty values remain ''.
-function convertNativeScalar(v) {
-  if (isEmpty(v)) return '';
-  if (v === true) return 'TRUE';
-  if (v === false) return 'FALSE';
-  const s = String(v).trim();
-  if (/^(true|yes|ya|iya|benar|on)$/i.test(s)) return 'TRUE';
-  if (/^(false|no|tidak|tdk|salah|off)$/i.test(s)) return 'FALSE';
   return s;
 }
 
@@ -66,7 +40,7 @@ function nativeFieldsAndData(rows, options = {}) {
         out[`${base}/id`] = String(rawVal).trim();
         continue;
       }
-      out[key] = convertNativeScalar(rawVal);
+      out[key] = convertScalar(rawVal);
     }
     for (const k of Object.keys(out)) if (!fields.includes(k)) fields.push(k);
     data.push(out);
@@ -102,9 +76,9 @@ function regularVals(row, modelFields = {}, options = {}) {
     }
 
     if (!modelFields[key] && !options.allowUnknownFields) { skipped.push(key); continue; }
-    vals[key] = convertRegularScalar(rawVal);
+    vals[key] = convertScalar(rawVal);
   }
   return { vals, relationLookups, m2mLookups, skipped };
 }
 
-module.exports = { nativeFieldsAndData, regularVals, isEmpty, parseBoolean, convertNativeScalar, convertRegularScalar };
+module.exports = { nativeFieldsAndData, regularVals, isEmpty };

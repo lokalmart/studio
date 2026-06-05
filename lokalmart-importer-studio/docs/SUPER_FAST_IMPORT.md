@@ -21,17 +21,3 @@ Catatan:
 
 - `ir.model.fields` tetap diproses khusus, bukan native load murni, agar konflik field existing tidak menghentikan seluruh workbook.
 - Foto tetap diproses sebagai fase khusus, karena gambar harus didownload lalu ditulis ke binary field `image_1920`.
-
-
-## Aturan boolean untuk Odoo `load()`
-
-Pada mode Super Cepat, nilai dikirim melalui `model.load(fields, data)`. Jalur ini meniru import native Odoo, sehingga boolean harus berbentuk teks. Mengirim boolean JavaScript mentah dapat membuat Odoo gagal dengan error `bool has no lower`.
-
-Importer Studio v1.0.1 sudah melakukan normalisasi otomatis:
-
-- `true` -> `TRUE`
-- `false` -> `FALSE`
-- `ya`, `yes`, `on` -> `TRUE`
-- `tidak`, `no`, `off` -> `FALSE`
-
-Walaupun demikian, file XLSX yang dibuat ChatGPT harus tetap mengikuti standar: tulis boolean sebagai teks `TRUE` / `FALSE`.

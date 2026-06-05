@@ -1,6 +1,6 @@
 {
   "name": "lokalmart-importer-studio",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "private": true,
   "description": "Lokalmart XLSX to Odoo importer with native-like super fast mode and photo queue import.",
   "scripts": {
