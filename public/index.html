@@ -11,7 +11,7 @@
 <body>
 <div class="app">
   <aside class="side">
-    <div class="brand"><div class="logo"></div><div><h1>Lokalmart<br/>Importer Studio</h1><p>Native-like XLSX importer</p></div></div>
+    <div class="brand"><div class="logo"></div><div><h1>Lokalmart<br/>Importer Studio</h1><p>Native-like XLSX importer v1.0.3</p></div></div>
     <div class="steps" id="steps"></div>
     <div style="height:18px"></div>
     <div class="card" style="padding:14px">
@@ -82,6 +82,8 @@
           <div class="stat"><b id="phMissing">0</b><span>Target Missing</span></div>
         </div>
         <p id="photoStatus" class="muted small">Menunggu import.</p>
+        <button class="secondary" id="btnRunPhotosOnly" disabled style="width:100%;margin-top:10px">Retry / Import Foto Saja</button>
+        <p class="muted small">Gunakan tombol ini untuk menjalankan ulang <code>photo_import_queue</code> tanpa mengulang import produk.</p>
       </div>
 
 
@@ -113,7 +115,7 @@ let state = { fileBase64:null, fileName:'', preview:null, logs:[], stopped:false
 
 const $ = id => document.getElementById(id);
 function target(){return {url:$('url').value.trim(),db:$('db').value.trim(),username:$('username').value.trim(),password:$('password').value};}
-function options(){return {continueOnError:$('continueOnError').checked, skipExistingFields:true, importPhotosAfterProducts:$('importPhotos').checked, disableTracking:true};}
+function options(){return {continueOnError:$('continueOnError').checked, skipExistingFields:true, importPhotosAfterProducts:$('importPhotos').checked, disableTracking:true, imageRetryAttempts:3, imageRetryBaseDelayMs:1200, imageDelayMs:350};}
 function log(msg, data){const item={time:new Date().toISOString(),msg,data:data||null};state.logs.push(item);$('log').textContent=state.logs.map(x=>`[${x.time.slice(11,19)}] ${x.msg}${x.data?'\n'+JSON.stringify(x.data,null,2):''}`).join('\n');$('log').scrollTop=$('log').scrollHeight;}
 function setPhase(p){state.currentPhase=p;renderPhases();}
 function donePhase(p){state.donePhases.add(p);renderPhases();}
@@ -130,8 +132,32 @@ function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new Fi
 
 $('btnTest').onclick=async()=>{try{setPhase('connection');$('connStatus').textContent='Menguji koneksi...';const r=await post('test_connection');$('connStatus').textContent=`✅ Terhubung. UID ${r.uid}${r.version?' — '+(r.version.server_version||''):''}`;donePhase('connection');log('Koneksi Odoo berhasil.',r);}catch(e){$('connStatus').textContent='❌ '+e.message;log('Koneksi gagal.',{error:e.message});}};
 $('btnPreview').onclick=preview;
-async function preview(){if(!state.fileBase64)return;setPhase('preview');const r=await post('preview_xlsx',{fileBase64:state.fileBase64});state.preview=r.sheets;renderPreview();donePhase('preview');$('btnRun').disabled=false;log('Preview XLSX selesai.',{sheets:r.sheets.length,total_rows:r.total_rows});}
+async function preview(){if(!state.fileBase64)return;setPhase('preview');const r=await post('preview_xlsx',{fileBase64:state.fileBase64});state.preview=r.sheets;renderPreview();donePhase('preview');$('btnRun').disabled=false;$('btnRunPhotosOnly').disabled=false;log('Preview XLSX selesai.',{sheets:r.sheets.length,total_rows:r.total_rows});}
 function renderPreview(){const rows=state.preview||[];$('previewBody').innerHTML=rows.map((s,i)=>`<tr><td>${i+1}</td><td>${s.sheet}</td><td><code>${s.model}</code></td><td>${s.rows}</td><td><span class="pill ok">Siap</span></td></tr>`).join('')||'<tr><td colspan="5" class="muted">Tidak ada sheet data.</td></tr>';}
+function getPhotoSheet(){
+  const sheets=state.preview||[];
+  return sheets.find(s=>s.model==='photo_import_queue' || s.sheet==='photo_import_queue' || s.sheet==='_photo_import_queue');
+}
+async function runPhotoOnly(){
+  if(!state.preview) await preview();
+  const photoSheet=getPhotoSheet();
+  if(!photoSheet){alert('Tidak ada sheet photo_import_queue.');return;}
+  state.stopped=false;$('btnRunPhotosOnly').disabled=true;$('btnStop').disabled=false;setPhase('photos');
+  state.photo={queued:photoSheet.rows,done:0,failed:0,missing:0};renderPhoto();$('photoStatus').textContent=`Retry foto mulai. ${photoSheet.rows} antrean.`;
+  try{
+    const pBatch=Math.max(1,Number($('photoBatchSize').value||4));
+    for(let offset=0; offset<photoSheet.rows; offset+=pBatch){
+      if(state.stopped) throw new Error('Import dihentikan user.');
+      const r=await post('import_product_images_batch',{fileBase64:state.fileBase64,sheet:photoSheet.sheet,offset,limit:pBatch,options:options()});
+      state.photo.done+=r.report.done||0;state.photo.failed+=r.report.failed||0;state.photo.missing+=r.report.target_missing||0;renderPhoto();
+      $('photoStatus').textContent=`Retry foto ${Math.min(offset+pBatch,photoSheet.rows)}/${photoSheet.rows}. Done ${state.photo.done}, gagal ${state.photo.failed}.`;
+      log(`Retry batch foto selesai offset ${offset}`,r.report);
+    }
+    donePhase('photos');setPhase('report');log('Retry/import foto saja selesai.',{photo:state.photo});
+  }catch(e){log('Retry/import foto berhenti/error.',{error:e.message});alert(e.message.slice(0,700));}
+  finally{$('btnRunPhotosOnly').disabled=false;$('btnStop').disabled=true;}
+}
+$('btnRunPhotosOnly').onclick=runPhotoOnly;
 $('btnPreflight').onclick=async()=>{if(!state.fileBase64)return;setPhase('preflight');const r=await post('preflight_xlsx',{fileBase64:state.fileBase64});donePhase('preflight');const pf=r.preflight;log('Preflight selesai.',pf);if(!pf.ok)alert('Preflight menemukan error blocking. Lihat log.');};
 
 $('btnStop').onclick=()=>{state.stopped=true;log('User meminta stop setelah batch aktif selesai.');};
@@ -164,7 +190,7 @@ async function runImport(){
     }
     if($('importPhotos').checked){
       setPhase('photos');
-      const photoSheet=sheets.find(s=>s.model==='photo_import_queue' || s.sheet==='photo_import_queue' || s.sheet==='_photo_import_queue');
+      const photoSheet=getPhotoSheet();
       if(!photoSheet){$('photoStatus').textContent='Tidak ada sheet photo_import_queue.';log('Foto dilewati: sheet photo_import_queue tidak ada.');}
       else if(productSuccess<=0){$('photoStatus').textContent='Foto tidak dijalankan karena 0 produk created/updated.';log('Foto ditahan: product.template belum berhasil created/updated.');}
       else{
