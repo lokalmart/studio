@@ -1,4 +1,4 @@
-# Lokalmart Importer Studio
+# Lokalmart Importer Studio v1.1.0
 
 Aplikasi Vercel untuk import XLSX ke Odoo dengan flow yang lebih intuitif:
 
@@ -122,3 +122,21 @@ UPDATE v1.0.2 - Product Image / eCommerce Media
 - Untuk eCommerce Media, buat record product.image lebih dulu lalu photo_import_queue menulis ke product.image.image_1920.
 - photo_import_queue harus memakai model dan record_external_id.
 - Parser tidak lagi mengubah teks TRUE/FALSE menjadi boolean terlalu awal, untuk mencegah error Odoo load(): bool has no lower.
+
+
+## v1.1.0 — Record Editor / Meja Kurasi Admin
+
+Fitur baru:
+
+- Direktori sheet/model setelah upload XLSX.
+- Pencarian dan sortir record.
+- Klik record untuk membuka detail.
+- Edit nama, harga jual, harga modal, vendor, area, status publish, deskripsi, dan semua kolom mentah.
+- Kalibrasi massal untuk record terpilih.
+- Upload foto utama produk dari komputer admin.
+- Tambah foto galeri eCommerce; app otomatis membuat record `product.image` dan antrean `photo_import_queue`.
+- Export XLSX hasil editor.
+- Tombol `Gunakan Hasil Editor untuk Import` agar file hasil edit langsung dipakai import.
+- Backend foto mendukung `image_base64`, jadi upload lokal tidak perlu URL publik.
+
+Lihat `docs/RECORD_EDITOR_FLOW.md` untuk detail alur.

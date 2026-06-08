@@ -3,26 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lokalmart Importer Studio</title>
+  <title>Lokalmart Importer Studio + Editor</title>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
-    :root{--bg:#0b1020;--panel:#121a2e;--panel2:#18223a;--line:#26324f;--text:#eef3ff;--muted:#9fb0d0;--ok:#44d07b;--warn:#ffd166;--err:#ff5f6d;--accent:#6ee7f9;--accent2:#a78bfa;--chip:#22304f}*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at top left,#1f2d5c 0,#0b1020 32%,#070a14 100%);color:var(--text)}button,input,select,textarea{font:inherit}button{border:0;border-radius:14px;padding:12px 16px;font-weight:700;cursor:pointer;color:#06111d;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 10px 30px #0007}button.secondary{background:#202b48;color:var(--text);border:1px solid var(--line);box-shadow:none}button.danger{background:#40242a;color:#fff;border:1px solid #743642}button:disabled{opacity:.45;cursor:not-allowed}.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}.side{border-right:1px solid var(--line);background:#080d1bdd;padding:24px;position:sticky;top:0;height:100vh;overflow:auto}.brand{display:flex;align-items:center;gap:12px;margin-bottom:22px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#ff9f1c,#6ee7f9);box-shadow:0 12px 32px #0008}.brand h1{font-size:20px;line-height:1.1;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}.steps{display:flex;flex-direction:column;gap:10px}.step{padding:12px 14px;border-radius:16px;border:1px solid var(--line);background:#10182b;color:var(--muted);display:flex;justify-content:space-between;align-items:center}.step.active{background:linear-gradient(135deg,#1b2a4e,#1d1644);color:var(--text);border-color:#6272ff}.step.done{border-color:#2d9f67;color:#caffe2}.main{padding:26px;max-width:1400px}.hero{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:20px}.hero h2{font-size:30px;margin:0 0 8px}.hero p{color:var(--muted);margin:0;max-width:760px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{background:linear-gradient(180deg,#131d33,#0f1728);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 12px 40px #0005}.span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}.card h3{margin:0 0 12px;font-size:17px}.field{display:flex;flex-direction:column;gap:7px;margin:10px 0}.field label{font-size:12px;color:var(--muted);font-weight:700}.field input,.field select{width:100%;background:#0b1222;border:1px solid var(--line);color:var(--text);border-radius:13px;padding:12px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row > *{flex:1}.muted{color:var(--muted)}.small{font-size:12px}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--chip);border-radius:99px;padding:7px 10px;color:#cdd8f6;font-size:12px;font-weight:700}.pill.ok{border-color:#25764f;color:#caffe2}.pill.warn{border-color:#806826;color:#ffe6a2}.pill.err{border-color:#8f3440;color:#ffd6d9}.progress{height:13px;border-radius:99px;background:#070b15;overflow:hidden;border:1px solid var(--line)}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.stat{background:#0c1324;border:1px solid var(--line);padding:12px;border-radius:16px}.stat b{display:block;font-size:24px}.stat span{color:var(--muted);font-size:12px}.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:16px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid #22304c;vertical-align:top}th{color:#cfe2ff;background:#121b30;position:sticky;top:0}tr:last-child td{border-bottom:0}.log{height:330px;overflow:auto;background:#070b15;border:1px solid var(--line);border-radius:16px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;white-space:pre-wrap}.guideBox{max-height:520px;overflow:auto;background:#070b15;border:1px solid var(--line);border-radius:16px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;white-space:pre-wrap}.check{display:flex;gap:10px;align-items:flex-start;background:#0c1324;border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:10px}.check input{margin-top:4px;transform:scale(1.2)}.hidden{display:none}.phase{display:flex;gap:8px;flex-wrap:wrap}.phase .pill{opacity:.6}.phase .pill.active{opacity:1;border-color:#6ee7f9}.phase .pill.done{opacity:1;border-color:#44d07b}.footerActions{position:sticky;bottom:0;background:linear-gradient(180deg,transparent,#070a14 30%);padding-top:16px;margin-top:14px;display:flex;gap:10px;justify-content:flex-end}@media(max-width:900px){.app{grid-template-columns:1fr}.side{position:relative;height:auto}.grid{grid-template-columns:1fr}.span4,.span6,.span8,.span12{grid-column:span 1}.stats{grid-template-columns:repeat(2,1fr)}.hero{flex-direction:column}}
+    :root{--bg:#080d18;--panel:#111a2f;--panel2:#17243f;--panel3:#0c1426;--line:#273757;--text:#eff5ff;--muted:#9eb0cf;--ok:#3ddc84;--warn:#ffd166;--err:#ff6473;--accent:#69e6ff;--accent2:#a88bff;--soft:#20304f;--edit:#fb923c}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at top left,#20366f 0,#0a1020 34%,#060812 100%);color:var(--text)}button,input,select,textarea{font:inherit}button{border:0;border-radius:13px;padding:11px 14px;font-weight:800;cursor:pointer;color:#06111d;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 10px 30px #0007}button.secondary{background:#1a2743;color:var(--text);border:1px solid var(--line);box-shadow:none}button.ghost{background:transparent;color:var(--text);border:1px solid var(--line);box-shadow:none}button.warn{background:linear-gradient(135deg,#ffd166,#fb923c)}button.danger{background:#4a222c;color:#fff;border:1px solid #85414d}button:disabled{opacity:.45;cursor:not-allowed}.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}.side{border-right:1px solid var(--line);background:#070b17e8;padding:22px;position:sticky;top:0;height:100vh;overflow:auto}.brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}.logo{width:44px;height:44px;border-radius:15px;background:linear-gradient(135deg,#fb923c,#69e6ff 55%,#a88bff);box-shadow:0 12px 32px #0009}.brand h1{font-size:19px;line-height:1.08;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}.steps{display:flex;flex-direction:column;gap:9px}.step{padding:11px 13px;border-radius:15px;border:1px solid var(--line);background:#10182b;color:var(--muted);display:flex;justify-content:space-between;align-items:center}.step.active{background:linear-gradient(135deg,#1b2a4e,#211747);color:var(--text);border-color:#687cff}.step.done{border-color:#2d9f67;color:#caffe2}.main{padding:24px;max-width:1580px}.hero{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:18px}.hero h2{font-size:29px;margin:0 0 8px}.hero p{color:var(--muted);margin:0;max-width:840px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:15px}.card{background:linear-gradient(180deg,#121d34,#0e1627);border:1px solid var(--line);border-radius:22px;padding:17px;box-shadow:0 12px 40px #0005}.span3{grid-column:span 3}.span4{grid-column:span 4}.span5{grid-column:span 5}.span6{grid-column:span 6}.span7{grid-column:span 7}.span8{grid-column:span 8}.span12{grid-column:span 12}.card h3{margin:0 0 12px;font-size:17px}.field{display:flex;flex-direction:column;gap:7px;margin:10px 0}.field label{font-size:12px;color:var(--muted);font-weight:800}.field input,.field select,.field textarea{width:100%;background:#0b1222;border:1px solid var(--line);color:var(--text);border-radius:13px;padding:11px}.field textarea{min-height:86px;resize:vertical}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.muted{color:var(--muted)}.small{font-size:12px}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--soft);border-radius:99px;padding:7px 10px;color:#cdd8f6;font-size:12px;font-weight:800}.pill.ok{border-color:#25764f;color:#caffe2}.pill.warn{border-color:#806826;color:#ffe6a2}.pill.err{border-color:#8f3440;color:#ffd6d9}.pill.edit{border-color:#a8651f;color:#ffd7ad}.progress{height:13px;border-radius:99px;background:#070b15;overflow:hidden;border:1px solid var(--line)}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.stat{background:#0c1324;border:1px solid var(--line);padding:12px;border-radius:16px}.stat b{display:block;font-size:23px}.stat span{color:var(--muted);font-size:12px}.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:16px;max-height:560px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px;border-bottom:1px solid #22304c;vertical-align:top}th{color:#cfe2ff;background:#121b30;position:sticky;top:0;z-index:1}tr:hover td{background:#121b2f}tr.selected td{background:#1d2f54}.log{height:310px;overflow:auto;background:#070b15;border:1px solid var(--line);border-radius:16px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;white-space:pre-wrap}.guideBox{max-height:520px;overflow:auto;background:#070b15;border:1px solid var(--line);border-radius:16px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;white-space:pre-wrap}.check{display:flex;gap:10px;align-items:flex-start;background:#0c1324;border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:10px}.check input{margin-top:4px;transform:scale(1.15)}.hidden{display:none}.phase{display:flex;gap:8px;flex-wrap:wrap}.phase .pill{opacity:.66}.phase .pill.active{opacity:1;border-color:#6ee7f9}.phase .pill.done{opacity:1;border-color:#44d07b}.editorLayout{display:grid;grid-template-columns:245px minmax(0,1fr) 410px;gap:14px}.directory{border:1px solid var(--line);background:#0b1222;border-radius:18px;padding:12px;max-height:690px;overflow:auto}.dirItem{padding:10px;border-radius:13px;border:1px solid transparent;display:flex;justify-content:space-between;gap:8px;cursor:pointer;color:#cfd9f2}.dirItem:hover,.dirItem.active{background:#14213a;border-color:#32476f}.editorTable{max-height:690px}.recordTitle{font-size:18px;font-weight:900;line-height:1.25}.rawGrid{display:grid;grid-template-columns:1fr;gap:8px;max-height:310px;overflow:auto;border:1px solid var(--line);border-radius:14px;padding:10px;background:#091020}.rawPair{display:grid;grid-template-columns:150px 1fr;gap:8px;align-items:start}.rawPair label{font-size:11px;color:var(--muted);padding-top:10px;word-break:break-all}.rawPair input,.rawPair textarea{background:#0d1528;border:1px solid #2a3b5d;color:var(--text);border-radius:10px;padding:9px}.thumbs{display:flex;gap:9px;flex-wrap:wrap;margin-top:9px}.thumb{width:78px;height:78px;border-radius:14px;object-fit:cover;border:1px solid var(--line);background:#07101d}.drop{border:1px dashed #55719f;border-radius:16px;padding:13px;background:#0a1326;color:#cfdbf7}.drop.drag{border-color:#69e6ff;background:#122443}.dirtyDot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#fb923c;margin-right:5px}.footerActions{position:sticky;bottom:0;background:linear-gradient(180deg,transparent,#070a14 30%);padding-top:16px;margin-top:14px;display:flex;gap:10px;justify-content:flex-end}.toolbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.toolbar .field{margin:0;min-width:150px}.calibration{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.calibration .field{margin:0}@media(max-width:1200px){.editorLayout{grid-template-columns:1fr}.directory{max-height:260px}.span3,.span4,.span5,.span6,.span7,.span8,.span12{grid-column:span 12}}@media(max-width:900px){.app{grid-template-columns:1fr}.side{position:relative;height:auto}.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hero{flex-direction:column}.calibration{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 <div class="app">
   <aside class="side">
-    <div class="brand"><div class="logo"></div><div><h1>Lokalmart<br/>Importer Studio</h1><p>Native-like XLSX importer v1.0.3</p></div></div>
+    <div class="brand"><div class="logo"></div><div><h1>Lokalmart<br/>Importer Studio</h1><p>v1.1.0 Record Editor</p></div></div>
     <div class="steps" id="steps"></div>
     <div style="height:18px"></div>
     <div class="card" style="padding:14px">
-      <b>Mode Super Cepat</b>
-      <p class="muted small">Memakai bulk import <code>load()</code> Odoo per model. Cocok untuk banyak field dan banyak data. Field custom tetap diproses khusus agar konflik tipe tidak menghentikan seluruh import.</p>
+      <b>Editor sebelum import</b>
+      <p class="muted small">Klik record, ubah nama/harga/deskripsi, upload foto utama atau galeri, lalu gunakan hasil editor untuk import.</p>
     </div>
   </aside>
   <main class="main">
     <section class="hero">
-      <div><h2>Import XLSX Odoo dengan flow jelas</h2><p>Upload, preview, preflight, import schema, master data, produk, supplier, lalu foto otomatis dengan feedback per batch.</p></div>
-      <div class="row" style="min-width:260px"><button id="btnRun" disabled>Mulai Import</button><button id="btnStop" class="danger" disabled>Stop</button></div>
+      <div><h2>Kalibrasi data sebelum masuk Odoo</h2><p>App ini sekarang punya direktori record, pencarian, sortir, detail editor, upload foto lokal, galeri eCommerce, dan export XLSX hasil kurasi.</p></div>
+      <div class="row" style="min-width:300px"><button id="btnRun" disabled>Mulai Import</button><button id="btnStop" class="danger" disabled>Stop</button></div>
     </section>
 
     <section class="grid">
@@ -39,67 +40,78 @@
       <div class="card span4">
         <h3>2. Upload XLSX</h3>
         <div class="field"><label>File XLSX</label><input id="file" type="file" accept=".xlsx,.xls" /></div>
-        <div class="row"><button class="secondary" id="btnPreview" disabled>Preview</button><button class="secondary" id="btnPreflight" disabled>Preflight</button></div>
         <p id="fileStatus" class="muted small">Belum ada file.</p>
+        <div class="row"><button class="secondary" id="btnPreview" disabled>Preview</button><button class="secondary" id="btnPreflight" disabled>Preflight</button></div>
       </div>
 
       <div class="card span4">
         <h3>3. Strategi Import</h3>
-        <div class="field"><label>Mode</label><select id="mode"><option value="super_fast">Super Cepat - Native-like load()</option><option value="normal">Aman - Upsert row-by-row</option></select></div>
-        <div class="field"><label>Batch Data</label><input id="batchSize" type="number" min="1" max="500" value="80" /></div>
-        <div class="field"><label>Batch Foto</label><input id="photoBatchSize" type="number" min="1" max="50" value="8" /></div>
-        <label class="check"><input id="continueOnError" type="checkbox" checked/><span><b>Lanjut walau ada error</b><br/><span class="muted small">Error dicatat, batch berikutnya tetap lanjut.</span></span></label>
-        <label class="check"><input id="importPhotos" type="checkbox" checked/><span><b>Import foto setelah produk terbuat</b><br/><span class="muted small">Foto menunggu product.template berhasil created/updated.</span></span></label>
+        <div class="field"><label>Mode</label><select id="mode"><option value="super_fast">Super Cepat / Native-like load()</option><option value="normal">Aman / RPC per row</option></select></div>
+        <div class="row"><div class="field"><label>Batch Data</label><input id="batchSize" type="number" value="50" min="1" max="200" /></div><div class="field"><label>Batch Foto</label><input id="photoBatchSize" type="number" value="4" min="1" max="20" /></div></div>
+        <label class="check"><input id="continueOnError" type="checkbox" checked/><span><b>Lanjut walau error</b><br/><span class="muted small">Error disimpan ke log, batch berikutnya tetap jalan.</span></span></label>
+        <label class="check"><input id="importPhotos" type="checkbox" checked/><span><b>Import foto setelah produk</b><br/><span class="muted small">Memproses <code>photo_import_queue</code> setelah produk/media dibuat.</span></span></label>
       </div>
 
       <div class="card span12">
-        <h3>Status Fase</h3>
-        <div class="phase" id="phasePills"></div>
-        <div style="height:12px"></div>
-        <div class="progress"><div class="bar" id="overallBar"></div></div>
-        <p class="muted small" id="currentStatus">Belum mulai.</p>
-        <div class="stats" style="margin-top:12px">
-          <div class="stat"><b id="stProcessed">0</b><span>Processed</span></div>
-          <div class="stat"><b id="stCreated">0</b><span>Created</span></div>
-          <div class="stat"><b id="stUpdated">0</b><span>Updated/Upserted</span></div>
-          <div class="stat"><b id="stSkipped">0</b><span>Skipped</span></div>
-          <div class="stat"><b id="stErrors">0</b><span>Errors</span></div>
+        <div class="row"><h3 style="margin:0">4. Record Editor / Meja Kurasi Admin</h3><span class="pill edit" id="editorDirtyPill">Belum ada perubahan</span><span class="pill" id="editorCountPill">0 record</span></div>
+        <p class="muted small">Pilih sheet/model di direktori, cari record, klik baris untuk membuka detail. Upload foto lokal akan membuat/mengisi <code>photo_import_queue</code> dengan <code>image_base64</code>, sehingga bisa langsung diimport tanpa URL publik.</p>
+        <div class="toolbar" style="margin:12px 0">
+          <div class="field"><label>Cari</label><input id="edSearch" placeholder="nama, external id, vendor, kategori..." /></div>
+          <div class="field"><label>Sortir</label><select id="edSort"><option value="__rownum">Urutan XLSX</option><option value="name">Nama</option><option value="list_price">Harga jual</option><option value="standard_price">Harga modal</option><option value="_external_id">External ID</option></select></div>
+          <div class="field"><label>Arah</label><select id="edSortDir"><option value="asc">Naik</option><option value="desc">Turun</option></select></div>
+          <div class="field"><label>Status</label><select id="edStatus"><option value="all">Semua</option><option value="dirty">Sudah diedit</option><option value="photo">Ada foto lokal</option><option value="noprice">Harga kosong/0</option><option value="publish">Published</option></select></div>
+          <button class="secondary" id="btnApplyFilter">Terapkan</button>
+          <button class="warn" id="btnUseEdited" disabled>Gunakan Hasil Editor untuk Import</button>
+          <button class="secondary" id="btnDownloadEdited" disabled>Download XLSX Edit</button>
         </div>
-      </div>
-
-      <div class="card span8">
-        <h3>Preview Sheet</h3>
-        <div class="tableWrap"><table><thead><tr><th>Urutan</th><th>Sheet</th><th>Model</th><th>Rows</th><th>Status</th></tr></thead><tbody id="previewBody"><tr><td colspan="5" class="muted">Belum preview.</td></tr></tbody></table></div>
-      </div>
-
-      <div class="card span4">
-        <h3>Foto Produk</h3>
-        <p class="muted small">Status khusus foto akan muncul setelah product.template selesai.</p>
-        <div class="stats" style="grid-template-columns:repeat(2,1fr)">
-          <div class="stat"><b id="phQueued">0</b><span>Queued</span></div>
-          <div class="stat"><b id="phDone">0</b><span>Done</span></div>
-          <div class="stat"><b id="phFailed">0</b><span>Failed</span></div>
-          <div class="stat"><b id="phMissing">0</b><span>Target Missing</span></div>
+        <div class="editorLayout">
+          <div class="directory" id="edDirectory"><span class="muted small">Upload XLSX dulu.</span></div>
+          <div>
+            <div class="tableWrap editorTable"><table><thead><tr><th><input type="checkbox" id="edSelectAll"/></th><th>#</th><th>Sheet</th><th>Nama / External ID</th><th>Harga</th><th>Vendor/Area</th><th>Status</th></tr></thead><tbody id="edTable"><tr><td colspan="7" class="muted">Belum ada record.</td></tr></tbody></table></div>
+            <div class="card" style="margin-top:12px;padding:13px;background:#0b1326">
+              <h3 style="margin-bottom:10px">Kalibrasi Massal untuk Record Terpilih</h3>
+              <div class="calibration">
+                <div class="field"><label>Naik/turun harga jual (%)</label><input id="bulkPct" type="number" placeholder="contoh 10 atau -5" /></div>
+                <div class="field"><label>Set Vendor Label</label><input id="bulkVendor" placeholder="contoh Koperasi Lokal Kejaksan" /></div>
+                <div class="field"><label>Set Area</label><input id="bulkArea" placeholder="contoh Cirebon" /></div>
+                <div class="field"><label>Publish Website</label><select id="bulkPublish"><option value="">Jangan ubah</option><option value="1">Published</option><option value="0">Draft</option></select></div>
+              </div>
+              <div class="row" style="margin-top:10px"><button class="secondary" id="btnBulkApply">Terapkan ke Terpilih</button><button class="ghost" id="btnBulkClear">Bersihkan Pilihan</button></div>
+            </div>
+          </div>
+          <div class="card" id="edDetail" style="padding:15px"><p class="muted">Klik satu record untuk melihat dan mengedit detail.</p></div>
         </div>
-        <p id="photoStatus" class="muted small">Menunggu import.</p>
-        <button class="secondary" id="btnRunPhotosOnly" disabled style="width:100%;margin-top:10px">Retry / Import Foto Saja</button>
-        <p class="muted small">Gunakan tombol ini untuk menjalankan ulang <code>photo_import_queue</code> tanpa mengulang import produk.</p>
-      </div>
-
-
-      <div class="card span12">
-        <h3>Panduan ChatGPT XLSX Lokalmart</h3>
-        <p class="muted small">Panduan ini harus diikuti setiap kali ChatGPT membuat file XLSX untuk Importer Studio. Termasuk pencegahan error boolean Odoo <code>bool has no lower</code>, aturan photo_import_queue, external ID, dan mode Super Cepat.</p>
-        <div class="row" style="margin-bottom:12px">
-          <button class="secondary" id="btnLoadGuide">Tampilkan Panduan TXT</button>
-          <a href="/docs/CHATGPT_XLSX_GUIDE.txt" target="_blank"><button class="secondary" type="button">Buka TXT</button></a>
-          <a href="/docs/CHATGPT_XLSX_GUIDE.txt" download><button class="secondary" type="button">Download TXT</button></a>
-        </div>
-        <div class="guideBox hidden" id="guideBox">Klik “Tampilkan Panduan TXT”.</div>
       </div>
 
       <div class="card span12">
-        <h3>Log Operasional</h3>
+        <h3>5. Preview Sheet</h3>
+        <div class="tableWrap"><table><thead><tr><th>#</th><th>Sheet</th><th>Model</th><th>Rows</th><th>Status</th></tr></thead><tbody id="previewBody"><tr><td colspan="5" class="muted">Belum ada preview.</td></tr></tbody></table></div>
+      </div>
+
+      <div class="card span12">
+        <h3>6. Progress Import</h3>
+        <div class="phase" id="phasePills"></div><div style="height:12px"></div>
+        <div class="progress"><div class="bar" id="overallBar"></div></div><p id="currentStatus" class="muted small">Belum mulai.</p>
+        <div class="stats"><div class="stat"><b id="stProcessed">0</b><span>Processed</span></div><div class="stat"><b id="stCreated">0</b><span>Created</span></div><div class="stat"><b id="stUpdated">0</b><span>Updated</span></div><div class="stat"><b id="stSkipped">0</b><span>Skipped</span></div><div class="stat"><b id="stErrors">0</b><span>Errors</span></div></div>
+      </div>
+
+      <div class="card span6">
+        <h3>7. Foto Produk</h3>
+        <p class="muted small">Foto dapat berasal dari URL atau upload lokal admin. Upload lokal disimpan sebagai base64 di <code>photo_import_queue</code>.</p>
+        <div class="stats"><div class="stat"><b id="phQueued">0</b><span>Queued</span></div><div class="stat"><b id="phDone">0</b><span>Done</span></div><div class="stat"><b id="phFailed">0</b><span>Failed</span></div><div class="stat"><b id="phMissing">0</b><span>Missing</span></div><div class="stat"><b id="phLocal">0</b><span>Local Upload</span></div></div>
+        <p id="photoStatus" class="muted small"></p>
+        <button class="secondary" id="btnRunPhotosOnly" disabled>Retry / Import Foto Saja</button>
+      </div>
+
+      <div class="card span6">
+        <h3>8. Panduan TXT</h3>
+        <p class="muted small">Panduan standar XLSX dan pencegahan error ditampilkan langsung dari repo.</p>
+        <div class="row"><button class="secondary" id="btnLoadGuide">Tampilkan Panduan TXT</button><a class="pill" href="/docs/CHATGPT_XLSX_GUIDE.txt" target="_blank">Buka TXT</a></div>
+        <div id="guideBox" class="guideBox hidden"></div>
+      </div>
+
+      <div class="card span12">
+        <h3>9. Log</h3>
         <div class="log" id="log"></div>
         <div class="footerActions"><button class="secondary" id="btnDownloadLog">Download Log JSON</button></div>
       </div>
@@ -108,127 +120,85 @@
 </div>
 
 <script>
-const API = '/api/odoo';
-const phaseList = ['connection','upload','preview','preflight','schema','master','products','relations','photos','report'];
-const phaseLabels = {connection:'Koneksi',upload:'Upload',preview:'Preview',preflight:'Preflight',schema:'Schema/Fields',master:'Master Data',products:'Produk',relations:'Relasi',photos:'Foto',report:'Laporan'};
-let state = { fileBase64:null, fileName:'', preview:null, logs:[], stopped:false, stats:{processed:0,created:0,updated:0,skipped:0,errors:0}, currentPhase:'connection', donePhases:new Set(), photo:{queued:0,done:0,failed:0,missing:0} };
+const API='/api/odoo';
+const $=id=>document.getElementById(id);
+const phaseList=['connection','upload','preview','preflight','editor','schema','master','products','relations','photos','report'];
+const phaseLabels={connection:'Koneksi',upload:'Upload',preview:'Preview',preflight:'Preflight',editor:'Editor',schema:'Schema',master:'Master Data',products:'Produk',relations:'Relasi/Media',photos:'Foto',report:'Laporan'};
+const state={fileBase64:null,fileName:'',preview:null,currentPhase:'connection',donePhases:new Set(),logs:[],stats:{processed:0,created:0,updated:0,skipped:0,errors:0},photo:{queued:0,done:0,failed:0,missing:0,local:0},stopped:false,editor:{wb:null,sheets:[],activeSheet:'product.template',records:[],filtered:[],selectedKey:null,selected:new Set(),dirty:new Set(),localPhotos:new Map(),audit:[]}};
 
-const $ = id => document.getElementById(id);
+function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function safeId(s){return String(s||'item').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,90)||'item';}
+function nowId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function isEmpty(v){return v===undefined||v===null||String(v).trim()==='';}
+function toNumber(v){const n=Number(String(v??'').replace(/[^0-9.-]/g,''));return Number.isFinite(n)?n:0;}
 function target(){return {url:$('url').value.trim(),db:$('db').value.trim(),username:$('username').value.trim(),password:$('password').value};}
-function options(){return {continueOnError:$('continueOnError').checked, skipExistingFields:true, importPhotosAfterProducts:$('importPhotos').checked, disableTracking:true, imageRetryAttempts:3, imageRetryBaseDelayMs:1200, imageDelayMs:350};}
-function log(msg, data){const item={time:new Date().toISOString(),msg,data:data||null};state.logs.push(item);$('log').textContent=state.logs.map(x=>`[${x.time.slice(11,19)}] ${x.msg}${x.data?'\n'+JSON.stringify(x.data,null,2):''}`).join('\n');$('log').scrollTop=$('log').scrollHeight;}
+function options(){return {continueOnError:$('continueOnError').checked,imageDelayMs:900,imageRetryAttempts:3,imageRetryBaseDelayMs:1500,skipExistingFields:true};}
+function log(msg,data){const item={time:new Date().toISOString(),msg,data:data||null};state.logs.push(item);$('log').textContent+=`[${new Date().toLocaleTimeString()}] ${msg}\n${data?JSON.stringify(data,null,2)+'\n':''}`;$('log').scrollTop=$('log').scrollHeight;}
 function setPhase(p){state.currentPhase=p;renderPhases();}
 function donePhase(p){state.donePhases.add(p);renderPhases();}
-function renderSteps(){ $('steps').innerHTML=phaseList.map(p=>`<div class="step ${state.currentPhase===p?'active':''} ${state.donePhases.has(p)?'done':''}"><span>${phaseLabels[p]}</span><span>${state.donePhases.has(p)?'✓':state.currentPhase===p?'●':'○'}</span></div>`).join('');}
+function renderSteps(){$('steps').innerHTML=phaseList.map(p=>`<div class="step ${state.currentPhase===p?'active':''} ${state.donePhases.has(p)?'done':''}"><span>${phaseLabels[p]}</span><span>${state.donePhases.has(p)?'✓':state.currentPhase===p?'●':'○'}</span></div>`).join('');}
 function renderPhases(){renderSteps();$('phasePills').innerHTML=phaseList.map(p=>`<span class="pill ${state.currentPhase===p?'active':''} ${state.donePhases.has(p)?'done':''}">${state.donePhases.has(p)?'✓':state.currentPhase===p?'●':'○'} ${phaseLabels[p]}</span>`).join('');}
 function addStats(r){if(!r)return;state.stats.processed+=(r.processed||0);state.stats.created+=(r.created||0);state.stats.updated+=(r.updated||0);state.stats.skipped+=(r.skipped||0);state.stats.errors+=(r.errors?r.errors.length:0);renderStats();}
-function renderStats(){ $('stProcessed').textContent=state.stats.processed; $('stCreated').textContent=state.stats.created; $('stUpdated').textContent=state.stats.updated; $('stSkipped').textContent=state.stats.skipped; $('stErrors').textContent=state.stats.errors; }
-function renderPhoto(){ $('phQueued').textContent=state.photo.queued; $('phDone').textContent=state.photo.done; $('phFailed').textContent=state.photo.failed; $('phMissing').textContent=state.photo.missing; }
+function renderStats(){$('stProcessed').textContent=state.stats.processed;$('stCreated').textContent=state.stats.created;$('stUpdated').textContent=state.stats.updated;$('stSkipped').textContent=state.stats.skipped;$('stErrors').textContent=state.stats.errors;}
+function renderPhoto(){$('phQueued').textContent=state.photo.queued;$('phDone').textContent=state.photo.done;$('phFailed').textContent=state.photo.failed;$('phMissing').textContent=state.photo.missing;$('phLocal').textContent=state.photo.local;}
 function setOverall(done,total){const pct=total?Math.min(100,Math.round(done/total*100)):0;$('overallBar').style.width=pct+'%';$('currentStatus').textContent=`${pct}% — ${done}/${total} row/fase diproses.`;}
 async function post(action,payload={},customTarget){const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,target:customTarget||target(),payload})});const json=await res.json();if(!json.ok)throw new Error(json.error+(json.detail?'\n'+json.detail:''));return json;}
-
-$('file').addEventListener('change', async e=>{const f=e.target.files[0];if(!f)return;state.fileName=f.name;state.fileBase64=await fileToBase64(f);$('fileStatus').textContent=`${f.name} siap (${Math.round(f.size/1024)} KB)`;$('btnPreview').disabled=false;$('btnPreflight').disabled=false;donePhase('upload');setPhase('preview');log('File XLSX siap dibaca.',{name:f.name,size:f.size});});
 function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(',').pop());r.onerror=reject;r.readAsDataURL(file);});}
+function fileToArrayBuffer(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsArrayBuffer(file);});}
+
+function inferModel(sheetName,row){if(row&&row._model)return row._model;if(sheetName==='photo_import_queue'||sheetName==='_photo_import_queue')return 'photo_import_queue';if(String(sheetName).includes('.'))return sheetName;return '';}
+function isEditorSheet(name,rows){if(name==='README'||name==='00_import_order'||name.startsWith('_'))return false;if(name==='photo_import_queue'||name==='_photo_import_queue')return true;if(String(name).includes('.'))return true;const first=rows&&rows[0];return !!(first&&(first._model||first._external_id||first.__action));}
+function normalizeRows(ws){return XLSX.utils.sheet_to_json(ws,{defval:'',raw:false}).map((r,i)=>{const out={__rownum:i+2};for(const [k,v] of Object.entries(r)){const key=String(k||'').trim();if(key)out[key]=typeof v==='string'?v.trim():v;}return out;}).filter(r=>Object.entries(r).some(([k,v])=>k!=='__rownum'&&String(v??'').trim()!==''));}
+function parseEditorWorkbook(arrayBuffer){if(!window.XLSX){alert('Library XLSX belum termuat. Refresh halaman.');return;}const wb=XLSX.read(arrayBuffer,{type:'array',cellDates:false,raw:false});const sheets=[];for(const name of wb.SheetNames){const rows=normalizeRows(wb.Sheets[name]);if(!isEditorSheet(name,rows))continue;const headers=[...new Set(rows.flatMap(r=>Object.keys(r).filter(k=>k!=='__rownum')))].filter(Boolean);const model=inferModel(name,rows[0]||{});rows.forEach((r,i)=>{r.__sheet=name;r.__idx=i;r.__model=model;r.__key=`${name}::${i}`;});sheets.push({name,model,headers,rows});}state.editor.wb=wb;state.editor.sheets=sheets;const first=sheets.find(s=>s.name==='product.template')||sheets[0];state.editor.activeSheet=first?first.name:'';state.editor.records=sheets.flatMap(s=>s.rows);state.editor.selected.clear();state.editor.selectedKey=null;donePhase('upload');setPhase('editor');renderEditorAll();}
+function sheetByName(name){return state.editor.sheets.find(s=>s.name===name);}
+function currentRows(){const sh=sheetByName(state.editor.activeSheet);return sh?sh.rows:[];}
+function recordDisplayName(r){return r.name||r.display_name||r.product_name||r.image_alt||r._external_id||r.record_external_id||'(tanpa nama)';}
+function recordPrice(r){return r.list_price||r.price||r.standard_price||'';}
+function recordVendor(r){return r.x_lm_vendor_label||r.vendor||r.partner_id_external_id||r.x_lm_area||'';}
+function markDirty(r,field,oldVal,newVal){if(String(oldVal??'')===String(newVal??''))return;state.editor.dirty.add(r.__key);state.editor.audit.push({time:new Date().toISOString(),sheet:r.__sheet,row:r.__rownum,external_id:r._external_id||'',field,old:oldVal,new:newVal});renderEditorBadges();}
+function setCell(r,field,value){const old=r[field]??'';r[field]=value;markDirty(r,field,old,value);}
+function renderEditorBadges(){const dirty=state.editor.dirty.size;const total=state.editor.records.length;state.photo.local=[...state.editor.localPhotos.values()].reduce((a,arr)=>a+arr.length,0);$('editorDirtyPill').innerHTML=dirty?`<span class="dirtyDot"></span>${dirty} record diedit`:'Belum ada perubahan';$('editorCountPill').textContent=`${total} record`;renderPhoto();$('btnUseEdited').disabled=!state.editor.records.length;$('btnDownloadEdited').disabled=!state.editor.records.length;}
+function renderEditorAll(){renderDirectory();applyEditorFilter();renderEditorBadges();}
+function renderDirectory(){const counts=state.editor.sheets.map(s=>({name:s.name,model:s.model,count:s.rows.length}));$('edDirectory').innerHTML=counts.map(s=>`<div class="dirItem ${state.editor.activeSheet===s.name?'active':''}" data-sheet="${esc(s.name)}"><span><b>${esc(s.name)}</b><br/><span class="muted small">${esc(s.model||'catatan')}</span></span><span class="pill">${s.count}</span></div>`).join('')||'<span class="muted small">Belum ada sheet import.</span>';document.querySelectorAll('.dirItem').forEach(el=>el.onclick=()=>{state.editor.activeSheet=el.dataset.sheet;state.editor.selected.clear();state.editor.selectedKey=null;renderEditorAll();});}
+function applyEditorFilter(){let rows=currentRows().slice();const q=$('edSearch').value.trim().toLowerCase();const status=$('edStatus').value;const sort=$('edSort').value;const dir=$('edSortDir').value==='desc'?-1:1;if(q){rows=rows.filter(r=>Object.values(r).some(v=>String(v??'').toLowerCase().includes(q)));}if(status==='dirty')rows=rows.filter(r=>state.editor.dirty.has(r.__key));if(status==='photo')rows=rows.filter(r=>(state.editor.localPhotos.get(r.__key)||[]).length>0);if(status==='noprice')rows=rows.filter(r=>!toNumber(r.list_price||r.price));if(status==='publish')rows=rows.filter(r=>String(r.website_published||'').match(/^(1|true|yes|published)$/i));rows.sort((a,b)=>{let av=a[sort]??'',bv=b[sort]??'';if(sort.includes('price')){av=toNumber(av);bv=toNumber(bv);}return av>bv?dir:av<bv?-dir:0;});state.editor.filtered=rows;renderEditorTable();}
+function renderEditorTable(){const rows=state.editor.filtered;$('edTable').innerHTML=rows.map((r,i)=>`<tr class="${state.editor.selectedKey===r.__key?'selected':''}" data-key="${r.__key}"><td><input type="checkbox" class="edPick" data-key="${r.__key}" ${state.editor.selected.has(r.__key)?'checked':''}/></td><td>${r.__rownum||i+2}</td><td><span class="pill">${esc(r.__sheet)}</span></td><td>${state.editor.dirty.has(r.__key)?'<span class="dirtyDot"></span>':''}<b>${esc(recordDisplayName(r))}</b><br/><span class="muted small mono">${esc(r._external_id||r.record_external_id||'')}</span></td><td>${esc(recordPrice(r))}</td><td>${esc(recordVendor(r))}<br/><span class="muted small">${esc(r.x_lm_area||'')}</span></td><td>${statusChips(r)}</td></tr>`).join('')||'<tr><td colspan="7" class="muted">Tidak ada record sesuai filter.</td></tr>';document.querySelectorAll('#edTable tr[data-key]').forEach(tr=>tr.onclick=e=>{if(e.target.classList.contains('edPick'))return;selectRecord(tr.dataset.key);});document.querySelectorAll('.edPick').forEach(cb=>cb.onchange=e=>{const key=e.target.dataset.key;if(e.target.checked)state.editor.selected.add(key);else state.editor.selected.delete(key);});}
+function statusChips(r){const chips=[];if(state.editor.dirty.has(r.__key))chips.push('<span class="pill edit">Edit</span>');if((state.editor.localPhotos.get(r.__key)||[]).length)chips.push('<span class="pill ok">Foto lokal</span>');if(String(r.website_published||'').match(/^(1|true|yes)$/i))chips.push('<span class="pill ok">Publish</span>');if(!toNumber(r.list_price||r.price)&&r.__model==='product.template')chips.push('<span class="pill warn">Harga 0</span>');return chips.join(' ')||'<span class="pill">OK</span>';}
+function findRecord(key){return state.editor.records.find(r=>r.__key===key);}
+function selectRecord(key){const r=findRecord(key);if(!r)return;state.editor.selectedKey=key;renderEditorTable();renderDetail(r);}
+function renderDetail(r){const isProduct=r.__model==='product.template';const isImage=r.__model==='product.image';const canPhoto=isProduct||isImage;const fields=[['name','Nama'],['default_code','Internal Ref'],['list_price','Harga Jual'],['standard_price','Harga Modal'],['x_lm_vendor_label','Vendor Label'],['x_lm_area','Area'],['x_lm_delivery_label','Status Kirim'],['website_published','Website Published'],['description_sale','Deskripsi Sale'],['website_description','Deskripsi Website']];const common=fields.map(([f,l])=>`<div class="field"><label>${l} <span class="muted mono">${f}</span></label>${f.includes('description')?`<textarea data-field="${f}">${esc(r[f]||'')}</textarea>`:`<input data-field="${f}" value="${esc(r[f]||'')}"/>`}</div>`).join('');const rawFields=Object.keys(r).filter(k=>!k.startsWith('__')).sort();const raw=rawFields.map(k=>`<div class="rawPair"><label>${esc(k)}</label>${String(r[k]||'').length>90?`<textarea data-raw="${esc(k)}">${esc(r[k]||'')}</textarea>`:`<input data-raw="${esc(k)}" value="${esc(r[k]||'')}"/>`}</div>`).join('');const photos=state.editor.localPhotos.get(r.__key)||[];$('edDetail').innerHTML=`<div class="recordTitle">${esc(recordDisplayName(r))}</div><p class="muted small mono">${esc(r.__sheet)} • row ${r.__rownum} • ${esc(r._external_id||r.record_external_id||'tanpa external id')}</p><div class="row"><span class="pill ${isProduct?'ok':''}">${esc(r.__model||'model?')}</span><span class="pill ${state.editor.dirty.has(r.__key)?'edit':''}">${state.editor.dirty.has(r.__key)?'Sudah diedit':'Belum diedit'}</span></div><h3 style="margin-top:14px">Kolom penting</h3>${common}<h3>Foto</h3>${canPhoto?photoTools(r):'<p class="muted small">Foto hanya untuk product.template atau product.image.</p>'}<div class="thumbs">${photos.map(p=>`<img class="thumb" src="${p.dataUrl}" title="${esc(p.filename)}"/>`).join('')}</div><h3 style="margin-top:14px">Semua kolom mentah</h3><div class="rawGrid">${raw}</div>`;document.querySelectorAll('#edDetail [data-field]').forEach(inp=>inp.onchange=e=>{setCell(r,e.target.dataset.field,e.target.value);renderEditorAll();selectRecord(r.__key);});document.querySelectorAll('#edDetail [data-raw]').forEach(inp=>inp.onchange=e=>{setCell(r,e.target.dataset.raw,e.target.value);renderEditorAll();selectRecord(r.__key);});const main=$('photoMainInput');if(main)main.onchange=e=>handlePhotoFiles(r,[...e.target.files],'main');const gal=$('photoGalleryInput');if(gal)gal.onchange=e=>handlePhotoFiles(r,[...e.target.files],'gallery');}
+function photoTools(r){return `<div class="drop"><b>Upload foto lokal</b><p class="muted small">Foto akan masuk ke sheet <code>photo_import_queue</code> sebagai <code>image_base64</code>. Tidak perlu URL publik.</p><div class="row"><label class="pill" style="cursor:pointer">Upload Foto Utama<input id="photoMainInput" type="file" accept="image/*" style="display:none"/></label><label class="pill" style="cursor:pointer">Tambah Galeri<input id="photoGalleryInput" type="file" accept="image/*" multiple style="display:none"/></label></div></div>`;}
+async function readPhotoFile(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>{const dataUrl=String(r.result);resolve({filename:file.name,mime:file.type||'image/jpeg',dataUrl,base64:dataUrl.split(',').pop()});};r.onerror=reject;r.readAsDataURL(file);});}
+async function handlePhotoFiles(record,files,kind){if(!files.length)return;for(const f of files){if(!/^image\//.test(f.type||'')){alert(`${f.name} bukan image.`);continue;}if(f.size>5*1024*1024){alert(`${f.name} terlalu besar. Maksimal 5MB.`);continue;}const p=await readPhotoFile(f);if(kind==='main')addMainPhoto(record,p);else addGalleryPhoto(record,p);}renderEditorBadges();renderEditorAll();selectRecord(record.__key);}
+function ensureSheet(name,model,headers){let s=sheetByName(name);if(!s){s={name,model,headers:[...headers],rows:[]};state.editor.sheets.push(s);}for(const h of headers)if(!s.headers.includes(h))s.headers.push(h);return s;}
+function makeRow(sheet,row){row.__sheet=sheet.name;row.__idx=sheet.rows.length;row.__model=sheet.model;row.__rownum=sheet.rows.length+2;row.__key=`${sheet.name}::${row.__idx}`;sheet.rows.push(row);state.editor.records.push(row);state.editor.dirty.add(row.__key);return row;}
+function productExternalId(record){return record._external_id||record.record_external_id||'';}
+function addPhotoQueue(targetModel,targetXid,photo,field='image_1920',note='Manual upload admin'){const sh=ensureSheet('photo_import_queue','photo_import_queue',['__action','_external_id','_model','model','record_external_id','image_base64','image_mime','image_field','image_alt','image_note','priority','source_filename']);const xid=`lokalmart.photo_manual_${safeId(targetXid)}_${nowId()}`;makeRow(sh,{__action:'upsert',_external_id:xid,_model:'photo_import_queue',model:targetModel,record_external_id:targetXid,image_base64:photo.base64,image_mime:photo.mime,image_field:field,image_alt:photo.filename,image_note:note,priority:5,source_filename:photo.filename});}
+function addMainPhoto(record,photo){const targetXid=productExternalId(record);if(!targetXid){alert('Record tidak punya _external_id/record_external_id.');return;}addPhotoQueue(record.__model||'product.template',targetXid,photo,'image_1920','Foto utama upload manual');const arr=state.editor.localPhotos.get(record.__key)||[];arr.unshift(photo);state.editor.localPhotos.set(record.__key,arr);state.editor.dirty.add(record.__key);state.editor.audit.push({time:new Date().toISOString(),sheet:record.__sheet,row:record.__rownum,external_id:targetXid,field:'image_1920',old:'',new:`local:${photo.filename}`});}
+function addGalleryPhoto(productRecord,photo){if(productRecord.__model==='product.image'){addMainPhoto(productRecord,photo);return;}const productXid=productExternalId(productRecord);if(!productXid){alert('Produk tidak punya _external_id.');return;}const imageSheet=ensureSheet('product.image','product.image',['__action','_external_id','_model','name','product_tmpl_id_external_id']);const imgXid=`lokalmart.media_${safeId(productXid)}_${nowId()}`;const imgRow=makeRow(imageSheet,{__action:'upsert',_external_id:imgXid,_model:'product.image',name:`Media ${recordDisplayName(productRecord)} - ${photo.filename}`,product_tmpl_id_external_id:productXid});addPhotoQueue('product.image',imgXid,photo,'image_1920','Galeri eCommerce upload manual');const arr=state.editor.localPhotos.get(productRecord.__key)||[];arr.push(photo);state.editor.localPhotos.set(productRecord.__key,arr);state.editor.dirty.add(productRecord.__key);state.editor.audit.push({time:new Date().toISOString(),sheet:productRecord.__sheet,row:productRecord.__rownum,external_id:productXid,field:'product.image',old:'',new:imgXid});}
+function selectedRecords(){return [...state.editor.selected].map(findRecord).filter(Boolean);}
+function bulkApply(){const recs=selectedRecords();if(!recs.length){alert('Pilih record dulu.');return;}const pct=$('bulkPct').value;const vendor=$('bulkVendor').value.trim();const area=$('bulkArea').value.trim();const pub=$('bulkPublish').value;for(const r of recs){if(pct!==''&&(r.list_price!==undefined||r.__model==='product.template')){const old=toNumber(r.list_price);if(old>0)setCell(r,'list_price',String(Math.round(old*(1+Number(pct)/100))));}if(vendor)setCell(r,'x_lm_vendor_label',vendor);if(area)setCell(r,'x_lm_area',area);if(pub!=='')setCell(r,'website_published',pub==='1'?'1':'0');}applyEditorFilter();renderEditorBadges();}
+function stripMeta(row){const out={};for(const [k,v] of Object.entries(row)){if(k.startsWith('__'))continue;out[k]=v;}return out;}
+function rebuildWorkbookBase64(){if(!window.XLSX)throw new Error('XLSX library belum termuat.');const wb=XLSX.utils.book_new();const original=state.editor.wb;const editorNames=new Set(state.editor.sheets.map(s=>s.name));if(original){for(const name of original.SheetNames){if(editorNames.has(name))continue;XLSX.utils.book_append_sheet(wb,original.Sheets[name],name);}}
+for(const s of state.editor.sheets){const rows=s.rows.map(stripMeta);const ws=XLSX.utils.json_to_sheet(rows,{skipHeader:false});XLSX.utils.book_append_sheet(wb,ws,s.name);}
+if(state.editor.audit.length){const ws=XLSX.utils.json_to_sheet(state.editor.audit);XLSX.utils.book_append_sheet(wb,ws,'_editor_audit');}
+const arr=XLSX.write(wb,{bookType:'xlsx',type:'array'});let bin='';const bytes=new Uint8Array(arr);const chunk=0x8000;for(let i=0;i<bytes.length;i+=chunk){bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));}return btoa(bin);}
+function downloadEdited(){try{const b64=rebuildWorkbookBase64();const a=document.createElement('a');a.href='data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'+b64;a.download=(state.fileName||'lokalmart_import').replace(/\.xlsx?$/,'')+'_EDITED.xlsx';a.click();}catch(e){alert(e.message);}}
+async function useEditedForImport(){try{state.fileBase64=rebuildWorkbookBase64();state.fileName=(state.fileName||'lokalmart_import').replace(/\.xlsx?$/,'')+'_EDITED.xlsx';$('fileStatus').textContent=`${state.fileName} dipakai dari hasil editor.`;log('Hasil editor dipakai untuk import.',{dirty:state.editor.dirty.size,localPhotos:state.photo.local});await preview();setPhase('preflight');donePhase('editor');}catch(e){alert(e.message);}}
+
+$('file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;state.fileName=f.name;const [b64,ab]=await Promise.all([fileToBase64(f),fileToArrayBuffer(f)]);state.fileBase64=b64;$('fileStatus').textContent=`${f.name} siap (${Math.round(f.size/1024)} KB)`;$('btnPreview').disabled=false;$('btnPreflight').disabled=false;parseEditorWorkbook(ab);$('btnRun').disabled=false;$('btnRunPhotosOnly').disabled=false;log('File XLSX siap dibaca dan masuk editor.',{name:f.name,size:f.size});});
+$('btnApplyFilter').onclick=applyEditorFilter;$('edSearch').oninput=applyEditorFilter;$('edSort').onchange=applyEditorFilter;$('edSortDir').onchange=applyEditorFilter;$('edStatus').onchange=applyEditorFilter;$('edSelectAll').onchange=e=>{for(const r of state.editor.filtered){if(e.target.checked)state.editor.selected.add(r.__key);else state.editor.selected.delete(r.__key);}renderEditorTable();};$('btnBulkApply').onclick=bulkApply;$('btnBulkClear').onclick=()=>{state.editor.selected.clear();renderEditorTable();};$('btnDownloadEdited').onclick=downloadEdited;$('btnUseEdited').onclick=useEditedForImport;
 
 $('btnTest').onclick=async()=>{try{setPhase('connection');$('connStatus').textContent='Menguji koneksi...';const r=await post('test_connection');$('connStatus').textContent=`✅ Terhubung. UID ${r.uid}${r.version?' — '+(r.version.server_version||''):''}`;donePhase('connection');log('Koneksi Odoo berhasil.',r);}catch(e){$('connStatus').textContent='❌ '+e.message;log('Koneksi gagal.',{error:e.message});}};
-$('btnPreview').onclick=preview;
-async function preview(){if(!state.fileBase64)return;setPhase('preview');const r=await post('preview_xlsx',{fileBase64:state.fileBase64});state.preview=r.sheets;renderPreview();donePhase('preview');$('btnRun').disabled=false;$('btnRunPhotosOnly').disabled=false;log('Preview XLSX selesai.',{sheets:r.sheets.length,total_rows:r.total_rows});}
-function renderPreview(){const rows=state.preview||[];$('previewBody').innerHTML=rows.map((s,i)=>`<tr><td>${i+1}</td><td>${s.sheet}</td><td><code>${s.model}</code></td><td>${s.rows}</td><td><span class="pill ok">Siap</span></td></tr>`).join('')||'<tr><td colspan="5" class="muted">Tidak ada sheet data.</td></tr>';}
-function getPhotoSheet(){
-  const sheets=state.preview||[];
-  return sheets.find(s=>s.model==='photo_import_queue' || s.sheet==='photo_import_queue' || s.sheet==='_photo_import_queue');
-}
-async function runPhotoOnly(){
-  if(!state.preview) await preview();
-  const photoSheet=getPhotoSheet();
-  if(!photoSheet){alert('Tidak ada sheet photo_import_queue.');return;}
-  state.stopped=false;$('btnRunPhotosOnly').disabled=true;$('btnStop').disabled=false;setPhase('photos');
-  state.photo={queued:photoSheet.rows,done:0,failed:0,missing:0};renderPhoto();$('photoStatus').textContent=`Retry foto mulai. ${photoSheet.rows} antrean.`;
-  try{
-    const pBatch=Math.max(1,Number($('photoBatchSize').value||4));
-    for(let offset=0; offset<photoSheet.rows; offset+=pBatch){
-      if(state.stopped) throw new Error('Import dihentikan user.');
-      const r=await post('import_product_images_batch',{fileBase64:state.fileBase64,sheet:photoSheet.sheet,offset,limit:pBatch,options:options()});
-      state.photo.done+=r.report.done||0;state.photo.failed+=r.report.failed||0;state.photo.missing+=r.report.target_missing||0;renderPhoto();
-      $('photoStatus').textContent=`Retry foto ${Math.min(offset+pBatch,photoSheet.rows)}/${photoSheet.rows}. Done ${state.photo.done}, gagal ${state.photo.failed}.`;
-      log(`Retry batch foto selesai offset ${offset}`,r.report);
-    }
-    donePhase('photos');setPhase('report');log('Retry/import foto saja selesai.',{photo:state.photo});
-  }catch(e){log('Retry/import foto berhenti/error.',{error:e.message});alert(e.message.slice(0,700));}
-  finally{$('btnRunPhotosOnly').disabled=false;$('btnStop').disabled=true;}
-}
+$('btnPreview').onclick=preview;async function preview(){if(!state.fileBase64)return;setPhase('preview');const r=await post('preview_xlsx',{fileBase64:state.fileBase64});state.preview=r.sheets;renderPreview();donePhase('preview');$('btnRun').disabled=false;$('btnRunPhotosOnly').disabled=false;log('Preview XLSX selesai.',{sheets:r.sheets.length,total_rows:r.total_rows});}
+function renderPreview(){const rows=state.preview||[];$('previewBody').innerHTML=rows.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.sheet)}</td><td><code>${esc(s.model)}</code></td><td>${s.rows}</td><td><span class="pill ok">Siap</span></td></tr>`).join('')||'<tr><td colspan="5" class="muted">Tidak ada sheet data.</td></tr>';}
+function getPhotoSheet(){const sheets=state.preview||[];return sheets.find(s=>s.model==='photo_import_queue'||s.sheet==='photo_import_queue'||s.sheet==='_photo_import_queue');}
+$('btnPreflight').onclick=async()=>{if(!state.fileBase64)return;setPhase('preflight');const r=await post('preflight_xlsx',{fileBase64:state.fileBase64});donePhase('preflight');log('Preflight selesai.',r.preflight);if(!r.preflight.ok)alert('Preflight menemukan error blocking. Lihat log.');};
+async function runPhotoOnly(){if(!state.preview)await preview();const photoSheet=getPhotoSheet();if(!photoSheet){alert('Tidak ada sheet photo_import_queue.');return;}state.stopped=false;$('btnRunPhotosOnly').disabled=true;$('btnStop').disabled=false;setPhase('photos');state.photo.queued=photoSheet.rows;state.photo.done=0;state.photo.failed=0;state.photo.missing=0;renderPhoto();$('photoStatus').textContent=`Retry foto mulai. ${photoSheet.rows} antrean.`;try{const pBatch=Math.max(1,Number($('photoBatchSize').value||4));for(let offset=0;offset<photoSheet.rows;offset+=pBatch){if(state.stopped)throw new Error('Import dihentikan user.');const r=await post('import_product_images_batch',{fileBase64:state.fileBase64,sheet:photoSheet.sheet,offset,limit:pBatch,options:options()});state.photo.done+=r.report.done||0;state.photo.failed+=r.report.failed||0;state.photo.missing+=r.report.target_missing||0;renderPhoto();$('photoStatus').textContent=`Retry foto ${Math.min(offset+pBatch,photoSheet.rows)}/${photoSheet.rows}. Done ${state.photo.done}, gagal ${state.photo.failed}.`;log(`Retry batch foto selesai offset ${offset}`,r.report);}donePhase('photos');setPhase('report');log('Retry/import foto saja selesai.',{photo:state.photo});}catch(e){log('Retry/import foto berhenti/error.',{error:e.message});alert(e.message.slice(0,700));}finally{$('btnRunPhotosOnly').disabled=false;$('btnStop').disabled=true;}}
 $('btnRunPhotosOnly').onclick=runPhotoOnly;
-$('btnPreflight').onclick=async()=>{if(!state.fileBase64)return;setPhase('preflight');const r=await post('preflight_xlsx',{fileBase64:state.fileBase64});donePhase('preflight');const pf=r.preflight;log('Preflight selesai.',pf);if(!pf.ok)alert('Preflight menemukan error blocking. Lihat log.');};
-
-$('btnStop').onclick=()=>{state.stopped=true;log('User meminta stop setelah batch aktif selesai.');};
-$('btnRun').onclick=runImport;
-async function runImport(){
-  if(!state.preview) await preview();
-  state.stopped=false;$('btnRun').disabled=true;$('btnStop').disabled=false;state.stats={processed:0,created:0,updated:0,skipped:0,errors:0};state.photo={queued:0,done:0,failed:0,missing:0};renderStats();renderPhoto();
-  try{
-    setPhase('preflight');const pf=await post('preflight_xlsx',{fileBase64:state.fileBase64});log('Preflight sebelum import.',pf.preflight);donePhase('preflight');
-    const sheets=state.preview.filter(s=>s.rows>0);
-    const totalRows=sheets.reduce((a,s)=>a+s.rows,0);let globalDone=0;let productSuccess=0;
-    const groups={schema:['ir.model','ir.model.fields','ir.model.access'],master:['res.partner.category','res.partner','product.category','product.public.category','product.tag','product.attribute','product.attribute.value'],products:['product.template'],relations:['product.template.attribute.line','product.supplierinfo','product.image'],photos:['photo_import_queue']};
-    for(const phase of ['schema','master','products','relations']){
-      setPhase(phase);
-      const phaseSheets=sheets.filter(s=>groups[phase].includes(s.model));
-      for(const s of phaseSheets){
-        if(state.stopped) throw new Error('Import dihentikan user.');
-        const mode = ($('mode').value==='super_fast' && s.model!=='ir.model.fields') ? 'import_native_sheet_batch' : 'import_sheet_batch';
-        const batchSize = Math.max(1,Number($('batchSize').value||50));
-        for(let offset=0; offset<s.rows; offset+=batchSize){
-          if(state.stopped) throw new Error('Import dihentikan user.');
-          $('currentStatus').textContent=`${phaseLabels[phase]} — ${s.sheet} row ${offset+1}-${Math.min(offset+batchSize,s.rows)} dari ${s.rows}`;
-          const r=await post(mode,{fileBase64:state.fileBase64,sheet:s.sheet,offset,limit:batchSize,mode:$('mode').value,options:options()});
-          addStats(r.report);globalDone+=r.report.rows||0;setOverall(globalDone,totalRows);
-          if(s.model==='product.template') productSuccess+=(r.report.created||0)+(r.report.updated||0);
-          log(`Batch selesai: ${s.sheet} offset ${offset}`,r.report);
-        }
-      }
-      donePhase(phase);
-    }
-    if($('importPhotos').checked){
-      setPhase('photos');
-      const photoSheet=getPhotoSheet();
-      if(!photoSheet){$('photoStatus').textContent='Tidak ada sheet photo_import_queue.';log('Foto dilewati: sheet photo_import_queue tidak ada.');}
-      else if(productSuccess<=0){$('photoStatus').textContent='Foto tidak dijalankan karena 0 produk created/updated.';log('Foto ditahan: product.template belum berhasil created/updated.');}
-      else{
-        state.photo.queued=photoSheet.rows;renderPhoto();$('photoStatus').textContent=`Foto mulai. ${photoSheet.rows} antrean.`;
-        const pBatch=Math.max(1,Number($('photoBatchSize').value||8));
-        for(let offset=0; offset<photoSheet.rows; offset+=pBatch){
-          if(state.stopped) throw new Error('Import dihentikan user.');
-          const r=await post('import_product_images_batch',{fileBase64:state.fileBase64,sheet:photoSheet.sheet,offset,limit:pBatch,options:options()});
-          state.photo.done+=r.report.done||0;state.photo.failed+=r.report.failed||0;state.photo.missing+=r.report.target_missing||0;renderPhoto();
-          $('photoStatus').textContent=`Foto ${Math.min(offset+pBatch,photoSheet.rows)}/${photoSheet.rows}. Done ${state.photo.done}, gagal ${state.photo.failed}.`;
-          log(`Batch foto selesai offset ${offset}`,r.report);
-        }
-      }
-      donePhase('photos');
-    }
-    setPhase('report');donePhase('report');setOverall(totalRows,totalRows);log('Import selesai.',{stats:state.stats,photo:state.photo});
-  }catch(e){log('Import berhenti/error.',{error:e.message});alert(e.message.slice(0,700));}
-  finally{$('btnRun').disabled=false;$('btnStop').disabled=true;}
-}
-
-$('btnDownloadLog').onclick=()=>{const blob=new Blob([JSON.stringify({file:state.fileName,logs:state.logs,stats:state.stats,photo:state.photo},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`lokalmart_import_log_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.json`;a.click();URL.revokeObjectURL(a.href);};
-
-
-$('btnLoadGuide').onclick=async()=>{
-  const box=$('guideBox');
-  box.classList.remove('hidden');
-  if(box.dataset.loaded==='1') return;
-  box.textContent='Memuat panduan...';
-  try{
-    const res=await fetch('/docs/CHATGPT_XLSX_GUIDE.txt');
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    box.textContent=await res.text();
-    box.dataset.loaded='1';
-  }catch(e){
-    box.textContent='Gagal memuat panduan TXT: '+e.message;
-  }
-};
-
+$('btnStop').onclick=()=>{state.stopped=true;log('User meminta stop setelah batch aktif selesai.');};$('btnRun').onclick=runImport;
+async function runImport(){if(!state.preview)await preview();state.stopped=false;$('btnRun').disabled=true;$('btnStop').disabled=false;state.stats={processed:0,created:0,updated:0,skipped:0,errors:0};state.photo={queued:0,done:0,failed:0,missing:0,local:state.photo.local};renderStats();renderPhoto();try{setPhase('preflight');const pf=await post('preflight_xlsx',{fileBase64:state.fileBase64});log('Preflight sebelum import.',pf.preflight);donePhase('preflight');const sheets=state.preview.filter(s=>s.rows>0);const totalRows=sheets.reduce((a,s)=>a+s.rows,0);let globalDone=0;let productSuccess=0;const groups={schema:['ir.model','ir.model.fields','ir.model.access'],master:['res.partner.category','res.partner','product.category','product.public.category','product.tag','product.attribute','product.attribute.value'],products:['product.template'],relations:['product.template.attribute.line','product.supplierinfo','product.image'],photos:['photo_import_queue']};for(const phase of ['schema','master','products','relations']){setPhase(phase);const phaseSheets=sheets.filter(s=>groups[phase].includes(s.model));for(const s of phaseSheets){if(state.stopped)throw new Error('Import dihentikan user.');const mode=($('mode').value==='super_fast'&&s.model!=='ir.model.fields')?'import_native_sheet_batch':'import_sheet_batch';const batchSize=Math.max(1,Number($('batchSize').value||50));for(let offset=0;offset<s.rows;offset+=batchSize){if(state.stopped)throw new Error('Import dihentikan user.');$('currentStatus').textContent=`${phaseLabels[phase]} — ${s.sheet} row ${offset+1}-${Math.min(offset+batchSize,s.rows)} dari ${s.rows}`;const r=await post(mode,{fileBase64:state.fileBase64,sheet:s.sheet,offset,limit:batchSize,mode:$('mode').value,options:options()});addStats(r.report);globalDone+=r.report.rows||0;setOverall(globalDone,totalRows);if(s.model==='product.template')productSuccess+=(r.report.created||0)+(r.report.updated||0);log(`Batch selesai: ${s.sheet} offset ${offset}`,r.report);}}donePhase(phase);}if($('importPhotos').checked){setPhase('photos');const photoSheet=getPhotoSheet();if(!photoSheet){$('photoStatus').textContent='Tidak ada sheet photo_import_queue.';log('Foto dilewati: sheet photo_import_queue tidak ada.');}else if(productSuccess<=0){$('photoStatus').textContent='Foto tidak dijalankan karena 0 produk created/updated.';log('Foto ditahan: product.template belum berhasil created/updated.');}else{state.photo.queued=photoSheet.rows;renderPhoto();$('photoStatus').textContent=`Foto mulai. ${photoSheet.rows} antrean.`;const pBatch=Math.max(1,Number($('photoBatchSize').value||4));for(let offset=0;offset<photoSheet.rows;offset+=pBatch){if(state.stopped)throw new Error('Import dihentikan user.');const r=await post('import_product_images_batch',{fileBase64:state.fileBase64,sheet:photoSheet.sheet,offset,limit:pBatch,options:options()});state.photo.done+=r.report.done||0;state.photo.failed+=r.report.failed||0;state.photo.missing+=r.report.target_missing||0;renderPhoto();$('photoStatus').textContent=`Foto ${Math.min(offset+pBatch,photoSheet.rows)}/${photoSheet.rows}. Done ${state.photo.done}, gagal ${state.photo.failed}.`;log(`Batch foto selesai offset ${offset}`,r.report);}}donePhase('photos');}setPhase('report');donePhase('report');setOverall(totalRows,totalRows);log('Import selesai.',{stats:state.stats,photo:state.photo});}catch(e){log('Import berhenti/error.',{error:e.message});alert(e.message.slice(0,700));}finally{$('btnRun').disabled=false;$('btnStop').disabled=true;}}
+$('btnDownloadLog').onclick=()=>{const blob=new Blob([JSON.stringify({file:state.fileName,logs:state.logs,stats:state.stats,photo:state.photo,editor:{dirty:state.editor.dirty.size,audit:state.editor.audit}},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`lokalmart_import_log_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.json`;a.click();URL.revokeObjectURL(a.href);};
+$('btnLoadGuide').onclick=async()=>{const box=$('guideBox');box.classList.remove('hidden');if(box.dataset.loaded==='1')return;try{const res=await fetch('/docs/CHATGPT_XLSX_GUIDE.txt');box.textContent=await res.text();box.dataset.loaded='1';}catch(e){box.textContent='Gagal memuat panduan: '+e.message;}};
 renderPhases();renderStats();renderPhoto();
 </script>
 </body>
