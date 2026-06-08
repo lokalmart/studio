@@ -1,4 +1,4 @@
-# Lokalmart Importer Studio v1.2.0
+# Lokalmart Importer Studio v1.3.0
 
 Aplikasi Vercel untuk import XLSX ke Odoo dengan flow yang lebih intuitif:
 
@@ -124,7 +124,7 @@ UPDATE v1.0.2 - Product Image / eCommerce Media
 - Parser tidak lagi mengubah teks TRUE/FALSE menjadi boolean terlalu awal, untuk mencegah error Odoo load(): bool has no lower.
 
 
-## v1.2.0 — Record Editor / Meja Kurasi Admin
+## v1.3.0 — Record Editor / Meja Kurasi Admin
 
 Fitur baru:
 
@@ -142,7 +142,7 @@ Fitur baru:
 Lihat `docs/RECORD_EDITOR_FLOW.md` untuk detail alur.
 
 
-## v1.2.0 Mobile UI Refresh
+## v1.3.0 Mobile UI Refresh
 
 Versi ini mengubah tampilan menjadi lebih seperti mobile admin app:
 
@@ -155,3 +155,15 @@ Versi ini mengubah tampilan menjadi lebih seperti mobile admin app:
 - Quick tiles di atas menampilkan jumlah record, record diedit, foto lokal, dan progress import.
 
 Catatan: backend tetap sama dengan v1.1.0, perubahan utama ada di `public/index.html` dan dokumentasi UI.
+
+
+## v1.3.0 SuperApp Horizontal Slide UI
+
+Versi ini mengubah tampilan menjadi model superapp admin internal Lokalmart:
+
+- Setiap step menjadi satu slide horizontal.
+- Navigasi memakai chips langkah dan tombol panah bawah.
+- Tidak ada scroll vertikal halaman utama; scroll hanya ada di list data, log, panduan, dan detail record.
+- Editor record tetap mendukung edit nama, harga, vendor, area, deskripsi, foto utama, dan galeri eCommerce.
+- Pada mobile, detail record muncul sebagai drawer slide dari kanan.
+

@@ -36,3 +36,33 @@ Tujuan versi ini adalah membuat Importer Studio terasa seperti aplikasi admin mo
 
 - UI ini tetap ditujukan untuk admin internal, bukan kasir mitra publik.
 - Untuk kasir mitra, gunakan API gateway khusus yang lebih sempit dan aman.
+
+## v1.3.0 — SuperApp Horizontal Slides
+
+Perubahan desain:
+
+- Seluruh modul utama tampil sebagai satu slide horizontal penuh.
+- Perpindahan modul memakai tombol kanan/kiri, chips langkah, gesture swipe kiri/kanan, dan tombol panah keyboard.
+- Body aplikasi tidak memakai scroll vertikal.
+- Scroll vertikal hanya dipakai di area data: daftar record, tabel preview, log, panduan, dan detail/raw field.
+- Pada mobile, detail record tampil sebagai drawer full-screen yang bergeser dari kanan.
+- Navigasi bawah lama disembunyikan dan diganti slide controls agar terasa seperti aplikasi admin internal/superapp.
+
+Urutan slide:
+
+1. Koneksi
+2. Upload
+3. Strategi
+4. Editor
+5. Preview
+6. Progress
+7. Foto
+8. Panduan
+9. Log
+
+Catatan UX:
+
+- Admin tidak perlu scroll halaman panjang.
+- Admin fokus pada satu konteks kerja per layar.
+- Editor data tetap bisa discroll karena daftar record bisa sangat panjang.
+- Tombol `← Kembali ke List` muncul di drawer detail record pada mobile.
