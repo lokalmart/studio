@@ -1,8 +1,8 @@
 {
   "name": "lokalmart-importer-studio",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
-  "description": "Lokalmart Importer Studio with superapp horizontal slide UI, record editor, photo upload, and Odoo import engine.",
+  "description": "Lokalmart Importer Studio - SuperApp slide UX with settings targets, XLSX editor, barcode scanner, and photo import.",
   "scripts": {
     "dev": "vercel dev",
     "start": "vercel dev",
