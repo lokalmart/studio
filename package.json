@@ -1,8 +1,8 @@
 {
   "name": "lokalmart-importer-studio",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
-  "description": "Lokalmart Importer Studio with pre-import record editor, local photo upload, Odoo native-like import, and photo retry.",
+  "description": "Lokalmart Importer Studio with mobile-first record editor, local photo upload, Odoo native-like import, and photo retry.",
   "scripts": {
     "dev": "vercel dev",
     "start": "vercel dev",
