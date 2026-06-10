@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lokalmart Studio · Full Export</title>
+  <style>
+    :root{
+      --bg:#f7f3ea;--card:#fffaf0;--ink:#24170f;--muted:#7d6c5b;--line:#eadfcf;
+      --brand:#8a4b20;--brand2:#d39a42;--ok:#2f7d4a;--bad:#b53b35;--warn:#9a6a14;--soft:#fff2d8;
+      --shadow:0 18px 48px rgba(55,34,16,.14);--r:24px;
+    }
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(145deg,#fbf7ef,#f1e4d1);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink)}
+    button,input,select,textarea{font:inherit} button{cursor:pointer;border:0} .app{min-height:100vh;display:flex;flex-direction:column}
+    .top{position:sticky;top:0;z-index:8;background:rgba(255,250,240,.86);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:12px 14px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}.logo{width:42px;height:42px;border-radius:16px;background:radial-gradient(circle at 30% 20%,#f6d982,#b86728 58%,#70401e);box-shadow:inset 0 1px 3px rgba(255,255,255,.8)}
+    .brand h1{font-size:16px;margin:0;line-height:1.1}.brand p{font-size:12px;color:var(--muted);margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:58vw}.top-actions{display:flex;gap:8px;align-items:center}.pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-size:12px;color:var(--muted);text-decoration:none}.pill.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .hero{padding:18px 14px 8px}.hero-card{background:linear-gradient(135deg,#fffaf0,#fff2d8);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:18px;display:grid;gap:12px;overflow:hidden;position:relative}.hero-card:after{content:"";position:absolute;right:-42px;top:-56px;width:190px;height:190px;border-radius:999px;background:rgba(211,154,66,.15)}
+    .eyebrow{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}.hero h2{font-size:28px;line-height:1.02;margin:0;max-width:680px}.hero p{margin:0;color:var(--muted);max-width:760px;line-height:1.5}.hero-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:8px}.mini{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px}.mini b{display:block;font-size:18px}.mini span{font-size:12px;color:var(--muted)}
+    .shell{display:grid;grid-template-columns:310px 1fr;gap:14px;padding:8px 14px 24px;max-width:1280px;width:100%;margin:0 auto}.panel{background:rgba(255,250,240,.78);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}.side{position:sticky;top:78px;align-self:start}.side-head{padding:16px;border-bottom:1px solid var(--line)}.side-head b{display:block}.side-head span{display:block;color:var(--muted);font-size:12px;margin-top:4px}.steps{display:grid;padding:8px}.step{display:flex;gap:10px;align-items:center;text-align:left;padding:12px;border-radius:18px;background:transparent;color:var(--ink)}.step:hover{background:#fff}.step.active{background:var(--soft);outline:1px solid #f0d5a4}.step.done .num{background:var(--ok)}.num{width:30px;height:30px;border-radius:12px;background:#d2c3ae;color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex:0 0 auto}.step.active .num{background:var(--brand)}.step b{font-size:14px}.step span{display:block;font-size:12px;color:var(--muted);margin-top:1px}.content{min-width:0}.screen{display:none;padding:18px}.screen.active{display:block}.screen h3{font-size:22px;margin:0 0 6px}.screen > p{margin:0 0 16px;color:var(--muted);line-height:1.55}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:grid;gap:6px}.field label{font-size:12px;font-weight:800;color:#5d4633}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:12px 13px;background:#fff;color:var(--ink);outline:none}.field textarea{min-height:90px;resize:vertical}.hint{font-size:12px;color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{border-radius:16px;padding:12px 14px;font-weight:800;background:#fff;border:1px solid var(--line);color:var(--ink)}.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}.btn.ghost{background:transparent}.btn.warn{background:#fff7e8;color:var(--warn);border-color:#efd19a}.btn:disabled{opacity:.55;cursor:not-allowed}
+    .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.choice{background:#fff;border:1px solid var(--line);border-radius:22px;padding:15px;text-align:left;display:grid;gap:7px;min-height:130px}.choice.active{outline:2px solid var(--brand);background:#fff8e8}.choice b{font-size:16px}.choice p{font-size:13px;line-height:1.45;color:var(--muted);margin:0}.choice small{color:var(--brand);font-weight:800}.switches{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.switch{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 12px;font-size:13px}.switch input{accent-color:var(--brand)}
+    .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px}.stat b{font-size:20px;display:block}.stat span{color:var(--muted);font-size:12px}.table-wrap{border:1px solid var(--line);border-radius:20px;overflow:auto;background:#fff;max-height:440px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:10px 12px;border-bottom:1px solid #f1e7d8;text-align:left;vertical-align:top;white-space:nowrap}th{position:sticky;top:0;background:#fff7e8;z-index:1}.ok{color:var(--ok);font-weight:800}.bad{color:var(--bad);font-weight:800}.warn{color:var(--warn);font-weight:800}.progress-list{display:grid;gap:9px}.model-row{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px}.model-top{display:flex;justify-content:space-between;gap:12px;align-items:center}.bar{height:9px;background:#eee3d2;border-radius:99px;overflow:hidden;margin-top:9px}.bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--brand),var(--brand2));transition:width .25s ease}.log{background:#21170f;color:#ffe9c7;border-radius:18px;padding:12px;min-height:120px;max-height:250px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;line-height:1.45}.download-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px;display:grid;gap:10px}.download-card code{white-space:normal;word-break:break-all;background:#fff7e8;padding:8px;border-radius:10px}.danger-zone{margin-top:14px;border:1px dashed #ddb7aa;background:#fff7f5;border-radius:18px;padding:12px;color:#7c332d}
+    @media(max-width:900px){.shell{grid-template-columns:1fr}.side{position:static}.steps{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));overflow:auto}.hero-grid,.summary{grid-template-columns:repeat(2,1fr)}.grid,.cards{grid-template-columns:1fr}.top-actions .pill:not(.primary){display:none}}
+    @media(max-width:520px){.hero h2{font-size:24px}.hero-grid,.summary{grid-template-columns:1fr}.screen{padding:14px}.top{align-items:flex-start}.brand p{max-width:70vw}.pill.primary{padding:8px 10px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="logo"></div><div><h1>Full Export Lokalmart</h1><p id="targetLabel">Target Odoo belum dipilih</p></div></div>
+    <div class="top-actions"><a class="pill" href="/">← Studio</a><button class="pill primary" onclick="go(0)">⚙ Target</button></div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">Odoo Context · Backup · Migration Safe</div>
+      <h2>Baca keadaan database sekarang, lalu simpan sebagai paket backup yang bisa dianalisis dan disiapkan untuk database baru.</h2>
+      <p>Fitur ini tidak langsung mengubah data Odoo. Alurnya dibuat seperti wizard: pilih target, pilih mode export, scan struktur, export bertahap, lalu download paket ZIP berisi JSON dan XLSX audit.</p>
+      <div class="hero-grid">
+        <div class="mini"><b id="miniModels">0</b><span>model discan</span></div>
+        <div class="mini"><b id="miniRecords">0</b><span>record terkumpul</span></div>
+        <div class="mini"><b id="miniErrors">0</b><span>warning/error</span></div>
+        <div class="mini"><b id="miniStatus">Idle</b><span>status export</span></div>
+      </div>
+    </div>
+  </section>
+
+  <main class="shell">
+    <aside class="panel side">
+      <div class="side-head"><b>Wizard Full Export</b><span>Ikuti dari atas ke bawah supaya tidak timeout dan hasilnya rapi.</span></div>
+      <nav class="steps" id="steps"></nav>
+    </aside>
+
+    <section class="panel content">
+      <div class="screen active" data-screen="0">
+        <h3>1. Target Odoo</h3>
+        <p>Pilih database yang akan dibaca. Data ini disimpan di browser perangkat admin, sama seperti pola Studio.</p>
+        <div class="grid">
+          <div class="field"><label>Nama Target</label><input id="tName" placeholder="Lokalmart Odoo" /></div>
+          <div class="field"><label>URL Odoo</label><input id="tUrl" placeholder="https://edu-lokalmart.odoo.com" /></div>
+          <div class="field"><label>Database</label><input id="tDb" placeholder="nama_database" /></div>
+          <div class="field"><label>Username</label><input id="tUsername" placeholder="email admin" /></div>
+          <div class="field"><label>Password / API Key</label><input id="tPassword" type="password" placeholder="password atau API key" /></div>
+          <div class="field"><label>Target tersimpan</label><select id="savedTargets"></select></div>
+        </div>
+        <div class="actions">
+          <button class="btn" onclick="loadSavedTarget()">Muat Target</button>
+          <button class="btn" onclick="saveTarget()">Simpan Target</button>
+          <button class="btn primary" onclick="testConnection()">Tes Koneksi</button>
+          <button class="btn ghost" onclick="discoverTargets()">Cari dari localStorage</button>
+        </div>
+        <p class="hint" id="targetHint">Belum dites.</p>
+      </div>
+
+      <div class="screen" data-screen="1">
+        <h3>2. Pilih jenis export</h3>
+        <p>Pilih sesuai kebutuhan. Untuk mengetahui kondisi database dan backup awal, mulai dari <b>Migration Safe Core</b>.</p>
+        <div class="cards" id="profileCards"></div>
+        <div class="switches">
+          <label class="switch"><input id="includeBinary" type="checkbox" /> Sertakan field binary/gambar <span class="warn">(besar & lambat)</span></label>
+          <label class="switch"><input id="continueOnModelError" type="checkbox" checked /> Lanjut walau ada model gagal</label>
+        </div>
+        <div class="field" style="margin-top:14px"><label>Model tambahan manual, pisahkan koma</label><textarea id="extraModels" placeholder="contoh: stock.quant, stock.picking, purchase.order"></textarea><span class="hint">Gunakan ini jika nanti Mas ingin membaca model tambahan tertentu.</span></div>
+        <div class="actions"><button class="btn" onclick="go(0)">Kembali</button><button class="btn primary" onclick="inspect()">Scan Database</button></div>
+      </div>
+
+      <div class="screen" data-screen="2">
+        <h3>3. Hasil scan</h3>
+        <p>Di tahap ini kita belum export semua data. Sistem hanya membaca model, jumlah record, dan field yang aman.</p>
+        <div class="summary">
+          <div class="stat"><b id="scanOk">0</b><span>model siap</span></div>
+          <div class="stat"><b id="scanFail">0</b><span>model gagal</span></div>
+          <div class="stat"><b id="scanRecords">0</b><span>estimasi record</span></div>
+          <div class="stat"><b id="scanFields">0</b><span>field terbaca</span></div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Model</th><th>Status</th><th>Records</th><th>Fields</th><th>Catatan</th></tr></thead><tbody id="scanRows"><tr><td colspan="5">Belum scan.</td></tr></tbody></table></div>
+        <div class="actions"><button class="btn" onclick="go(1)">Kembali</button><button class="btn primary" id="startExportBtn" onclick="startExport()" disabled>Mulai Export Bertahap</button></div>
+      </div>
+
+      <div class="screen" data-screen="3">
+        <h3>4. Export bertahap</h3>
+        <p>Frontend memanggil API per model dan per batch agar tidak terlalu mudah timeout di Vercel.</p>
+        <div class="summary">
+          <div class="stat"><b id="exportCurrent">-</b><span>model aktif</span></div>
+          <div class="stat"><b id="exportCollected">0</b><span>record terkumpul</span></div>
+          <div class="stat"><b id="exportDone">0%</b><span>progres total</span></div>
+          <div class="stat"><b id="batchSizeLabel">80</b><span>batch size</span></div>
+        </div>
+        <div class="field" style="max-width:260px;margin-bottom:12px"><label>Batch size</label><input id="batchSize" type="number" min="10" max="300" value="80" /></div>
+        <div class="progress-list" id="progressList"></div>
+        <div class="actions"><button class="btn primary" id="runExportBtn" onclick="runExportLoop()">Jalankan / Lanjutkan</button><button class="btn warn" onclick="stopExport()">Stop</button><button class="btn" onclick="downloadRawJson()">Download JSON Sementara</button></div>
+        <div class="log" id="logBox">Log export akan muncul di sini.</div>
+      </div>
+
+      <div class="screen" data-screen="4">
+        <h3>5. Download paket</h3>
+        <p>Buat paket ZIP berisi JSON per model, XLSX audit, manifest, schema, dan README restore.</p>
+        <div class="download-card">
+          <b>Paket backup belum dibuat</b>
+          <span class="hint">Klik tombol di bawah setelah export selesai. Jika data sangat besar, download JSON sementara dulu dan gunakan paket per model.</span>
+          <code id="packageInfo">Belum ada file.</code>
+          <div class="actions"><button class="btn primary" onclick="makePackage()">Buat ZIP + XLSX Audit</button><button class="btn" onclick="downloadRawJson()">Download Raw JSON</button><button class="btn ghost" onclick="resetAll()">Reset</button></div>
+        </div>
+        <div class="danger-zone"><b>Catatan backup:</b> ini adalah application-level export melalui XML-RPC, bukan dump PostgreSQL. Untuk database baru, tetap perlu modul yang sama, custom field/model yang sesuai, lalu restore bertahap.</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const stepsDef = [
+  ['Target', 'Pilih database Odoo'],
+  ['Mode', 'Pilih profil export'],
+  ['Scan', 'Cek model & field'],
+  ['Export', 'Ambil data bertahap'],
+  ['Download', 'Buat paket backup']
+];
+const state = {
+  step: 0,
+  target: {},
+  profiles: {},
+  selectedProfile: 'migration_safe_core',
+  scan: null,
+  dataByModel: {},
+  schemaByModel: {},
+  modelReports: [],
+  warnings: [],
+  stop: false,
+  exportedRecords: 0
+};
+
+init();
+async function init(){
+  renderSteps();
+  discoverTargets();
+  renderProfiles(await loadProfiles());
+  updateMini();
+}
+
+function renderSteps(){
+  const el = document.getElementById('steps');
+  el.innerHTML = stepsDef.map((s,i)=>`<button class="step ${i===state.step?'active':''} ${i<state.step?'done':''}" onclick="go(${i})"><span class="num">${i+1}</span><span><b>${s[0]}</b><span>${s[1]}</span></span></button>`).join('');
+}
+function go(i){
+  state.step = i;
+  document.querySelectorAll('.screen').forEach(sc=>sc.classList.toggle('active', Number(sc.dataset.screen)===i));
+  renderSteps();
+  updateMini();
+}
+function log(msg){
+  const box = document.getElementById('logBox');
+  const time = new Date().toLocaleTimeString('id-ID');
+  box.textContent += `\n[${time}] ${msg}`;
+  box.scrollTop = box.scrollHeight;
+}
+function updateMini(){
+  document.getElementById('miniModels').textContent = state.modelReports.length || 0;
+  document.getElementById('miniRecords').textContent = state.exportedRecords || 0;
+  document.getElementById('miniErrors').textContent = state.warnings.length || 0;
+  document.getElementById('miniStatus').textContent = state.step===4?'Ready':state.step===3?'Export':state.step===2?'Scan':state.step===1?'Mode':'Target';
+  const name = state.target.name || document.getElementById('tName')?.value || 'Target Odoo belum dipilih';
+  const db = state.target.db || document.getElementById('tDb')?.value || '';
+  document.getElementById('targetLabel').textContent = db ? `${name} · ${db}` : name;
+}
+async function api(action, payload={}){
+  const res = await fetch('/api/full-export', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action, target:getTarget(), payload})});
+  const json = await res.json().catch(()=>({ok:false,error:'Respons bukan JSON.'}));
+  if(!res.ok || !json.ok) throw new Error(json.error || json.detail || `HTTP ${res.status}`);
+  return json;
+}
+async function loadProfiles(){
+  try{ const r = await api('profiles',{}); state.profiles = r.profiles || {}; return state.profiles; }
+  catch(e){
+    state.profiles = fallbackProfiles();
+    return state.profiles;
+  }
+}
+function fallbackProfiles(){
+  return {
+    project_context:{label:'Project Context',description:'Project, task, stage, milestone, Knowledge, external ID.'},
+    migration_safe_core:{label:'Migration Safe Core',description:'Master data bisnis untuk backup awal database baru.'},
+    full_business:{label:'Full Business Export',description:'Data bisnis luas termasuk transaksi dan eLearning.'},
+    technical_autopsy:{label:'Technical Autopsy',description:'Model, field, ACL, view, menu, action, external ID.'}
+  };
+}
+function renderProfiles(profiles){
+  const el = document.getElementById('profileCards');
+  el.innerHTML = Object.entries(profiles).map(([key,p])=>`<button class="choice ${key===state.selectedProfile?'active':''}" onclick="selectProfile('${key}')"><small>${key}</small><b>${escapeHtml(p.label||key)}</b><p>${escapeHtml(p.description||'')}</p></button>`).join('');
+}
+function selectProfile(key){state.selectedProfile=key;renderProfiles(state.profiles)}
+function getTarget(){
+  return {
+    name: document.getElementById('tName').value.trim(),
+    url: document.getElementById('tUrl').value.trim(),
+    db: document.getElementById('tDb').value.trim(),
+    username: document.getElementById('tUsername').value.trim(),
+    password: document.getElementById('tPassword').value
+  };
+}
+function setTarget(t={}){
+  document.getElementById('tName').value = t.name || '';
+  document.getElementById('tUrl').value = t.url || '';
+  document.getElementById('tDb').value = t.db || t.database || '';
+  document.getElementById('tUsername').value = t.username || t.login || '';
+  document.getElementById('tPassword').value = t.password || t.apiKey || '';
+  state.target = getTarget();
+  updateMini();
+}
+function saveTarget(){
+  const t = getTarget();
+  const key = 'lokalmart_full_export_targets';
+  const list = JSON.parse(localStorage.getItem(key)||'[]').filter(x => x.name !== t.name);
+  list.unshift(t);
+  localStorage.setItem(key, JSON.stringify(list.slice(0,8)));
+  state.target = t;
+  discoverTargets();
+  document.getElementById('targetHint').textContent = 'Target tersimpan di browser.';
+  updateMini();
+}
+function discoverTargets(){
+  const select = document.getElementById('savedTargets');
+  const found = [];
+  try{ found.push(...JSON.parse(localStorage.getItem('lokalmart_full_export_targets')||'[]')); }catch(_){ }
+  for(let i=0;i<localStorage.length;i++){
+    const k = localStorage.key(i);
+    if(!/target|odoo|lokalmart/i.test(k)) continue;
+    try{
+      const v = JSON.parse(localStorage.getItem(k));
+      const arr = Array.isArray(v) ? v : [v];
+      for(const x of arr){ if(x && (x.url||x.db||x.username)) found.push({...x, name:x.name||x.label||k}); }
+    }catch(_){ }
+  }
+  const unique=[]; const seen=new Set();
+  for(const t of found){ const id=[t.url,t.db||t.database,t.username||t.login].join('|'); if(!seen.has(id) && t.url){seen.add(id);unique.push(t)} }
+  select.innerHTML = unique.length ? unique.map((t,i)=>`<option value="${i}">${escapeHtml(t.name||t.db||t.url)} · ${escapeHtml(t.db||t.database||'')}</option>`).join('') : '<option value="">Belum ada target tersimpan</option>';
+  select._targets = unique;
+  if(unique[0] && !document.getElementById('tUrl').value) setTarget(unique[0]);
+}
+function loadSavedTarget(){
+  const select = document.getElementById('savedTargets');
+  const t = select._targets && select._targets[Number(select.value)];
+  if(t) setTarget(t);
+}
+async function testConnection(){
+  try{
+    state.target = getTarget();
+    document.getElementById('targetHint').textContent = 'Menguji koneksi...';
+    const r = await api('inspect', {profile:'project_context', models:['project.project'], includeBinary:false});
+    document.getElementById('targetHint').textContent = `Koneksi berhasil. UID ${r.uid}. Version: ${JSON.stringify(r.version||{})}`;
+    saveTarget();
+    go(1);
+  }catch(e){ document.getElementById('targetHint').textContent = 'Gagal: '+e.message; }
+}
+async function inspect(){
+  go(2);
+  const includeBinary = document.getElementById('includeBinary').checked;
+  const extra = document.getElementById('extraModels').value.split(',').map(x=>x.trim()).filter(Boolean);
+  document.getElementById('scanRows').innerHTML = '<tr><td colspan="5">Scanning...</td></tr>';
+  try{
+    const r = await api('inspect', {profile:state.selectedProfile, models:extra.length? extra : undefined, includeBinary});
+    state.scan = r;
+    state.modelReports = (r.models||[]);
+    state.schemaByModel = Object.fromEntries(state.modelReports.filter(m=>m.ok).map(m=>[m.model,m.schema||{}]));
+    state.warnings = state.modelReports.filter(m=>!m.ok).map(m=>({model:m.model,error:m.error,detail:m.detail}));
+    renderScan();
+    document.getElementById('startExportBtn').disabled = !state.modelReports.some(m=>m.ok);
+  }catch(e){
+    document.getElementById('scanRows').innerHTML = `<tr><td colspan="5" class="bad">${escapeHtml(e.message)}</td></tr>`;
+  }
+  updateMini();
+}
+function renderScan(){
+  const rows = state.modelReports || [];
+  const ok = rows.filter(r=>r.ok).length;
+  const fail = rows.length-ok;
+  const recs = rows.reduce((a,b)=>a+(Number(b.count)||0),0);
+  const fields = rows.reduce((a,b)=>a+(Number(b.field_count)||0),0);
+  document.getElementById('scanOk').textContent=ok;
+  document.getElementById('scanFail').textContent=fail;
+  document.getElementById('scanRecords').textContent=recs;
+  document.getElementById('scanFields').textContent=fields;
+  document.getElementById('scanRows').innerHTML = rows.map(r=>`<tr><td><b>${escapeHtml(r.model)}</b></td><td class="${r.ok?'ok':'bad'}">${r.ok?'Siap':'Gagal'}</td><td>${r.count||0}</td><td>${r.field_count||0}</td><td>${escapeHtml(r.warning||r.error||'')}</td></tr>`).join('');
+}
+function startExport(){
+  renderProgress();
+  go(3);
+}
+function renderProgress(){
+  const rows = state.modelReports.filter(m=>m.ok);
+  document.getElementById('progressList').innerHTML = rows.map(m=>`<div class="model-row" id="prog_${cssId(m.model)}"><div class="model-top"><b>${escapeHtml(m.model)}</b><span><span class="got">0</span> / ${m.count||0}</span></div><div class="bar"><i></i></div></div>`).join('');
+}
+async function runExportLoop(){
+  if(!state.modelReports.length) return;
+  state.stop = false;
+  document.getElementById('runExportBtn').disabled = true;
+  const includeBinary = document.getElementById('includeBinary').checked;
+  const continueOnError = document.getElementById('continueOnModelError').checked;
+  const limit = Math.max(10, Math.min(Number(document.getElementById('batchSize').value||80), 300));
+  document.getElementById('batchSizeLabel').textContent = limit;
+  const models = state.modelReports.filter(m=>m.ok);
+  let doneModels = 0;
+  for(const m of models){
+    if(state.stop) break;
+    if(state.dataByModel[m.model] && state.dataByModel[m.model].__done){ doneModels++; continue; }
+    document.getElementById('exportCurrent').textContent = m.model;
+    state.dataByModel[m.model] = state.dataByModel[m.model] || [];
+    let offset = state.dataByModel[m.model].length || 0;
+    log(`Mulai export ${m.model} dari offset ${offset}.`);
+    try{
+      while(!state.stop){
+        const r = await api('fetch_model', {model:m.model, fields:m.fields||[], offset, limit, includeBinary});
+        state.dataByModel[m.model].push(...(r.rows||[]));
+        state.exportedRecords += (r.rows||[]).length;
+        offset = r.next_offset;
+        updateModelProgress(m.model, state.dataByModel[m.model].length, m.count||0);
+        updateExportTotals(models, doneModels);
+        if(r.done) break;
+      }
+      state.dataByModel[m.model].__done = true;
+      doneModels++;
+      log(`Selesai ${m.model}: ${state.dataByModel[m.model].length} record.`);
+    }catch(e){
+      state.warnings.push({model:m.model,error:e.message});
+      log(`ERROR ${m.model}: ${e.message}`);
+      if(!continueOnError) break;
+    }
+  }
+  document.getElementById('runExportBtn').disabled = false;
+  updateExportTotals(models, doneModels);
+  updateMini();
+  if(!state.stop) go(4);
+}
+function updateModelProgress(model, got, total){
+  const el = document.getElementById('prog_'+cssId(model)); if(!el) return;
+  el.querySelector('.got').textContent = got;
+  const pct = total ? Math.min(100, Math.round(got/total*100)) : 100;
+  el.querySelector('i').style.width = pct+'%';
+}
+function updateExportTotals(models, doneModels){
+  const got = Object.values(state.dataByModel).reduce((a,b)=>a+(Array.isArray(b)?b.length:0),0);
+  const total = models.reduce((a,b)=>a+(Number(b.count)||0),0);
+  document.getElementById('exportCollected').textContent = got;
+  document.getElementById('exportDone').textContent = total ? Math.min(100,Math.round(got/total*100))+'%' : '0%';
+  updateMini();
+}
+function stopExport(){ state.stop=true; log('Export dihentikan oleh admin. Bisa dilanjutkan lagi.'); }
+async function makePackage(){
+  try{
+    document.getElementById('packageInfo').textContent = 'Membuat paket ZIP + XLSX di server...';
+    const cleanData = {};
+    for(const [k,v] of Object.entries(state.dataByModel)){ if(Array.isArray(v)) cleanData[k]=v; }
+    const r = await api('make_package', {profile:state.selectedProfile, targetInfo:safeTargetInfo(getTarget()), dataByModel:cleanData, schemaByModel:state.schemaByModel, modelReports:state.modelReports, warnings:state.warnings});
+    const blob = base64ToBlob(r.zip_base64, r.mime||'application/zip');
+    downloadBlob(blob, r.filename || 'lokalmart_full_export.zip');
+    document.getElementById('packageInfo').textContent = `${r.filename} · ${Math.round((r.size_bytes||0)/1024)} KB · ${r.manifest.total_records} records`;
+  }catch(e){
+    document.getElementById('packageInfo').textContent = 'Gagal membuat paket: '+e.message+' — gunakan Download Raw JSON sebagai fallback.';
+  }
+}
+function downloadRawJson(){
+  const cleanData = {};
+  for(const [k,v] of Object.entries(state.dataByModel)){ if(Array.isArray(v)) cleanData[k]=v; }
+  const payload = {generated_at:new Date().toISOString(), profile:state.selectedProfile, target:safeTargetInfo(getTarget()), modelReports:state.modelReports, schemaByModel:state.schemaByModel, warnings:state.warnings, dataByModel:cleanData};
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
+  downloadBlob(blob, `lokalmart_full_export_raw_${Date.now()}.json`);
+}
+function resetAll(){
+  state.scan=null; state.dataByModel={}; state.schemaByModel={}; state.modelReports=[]; state.warnings=[]; state.stop=false; state.exportedRecords=0;
+  document.getElementById('scanRows').innerHTML='<tr><td colspan="5">Belum scan.</td></tr>';
+  document.getElementById('progressList').innerHTML='';
+  document.getElementById('logBox').textContent='Log export akan muncul di sini.';
+  document.getElementById('packageInfo').textContent='Belum ada file.';
+  go(0);
+}
+function safeTargetInfo(t){return {name:t.name,url:t.url,db:t.db,username:t.username}}
+function base64ToBlob(base64, mime){
+  const bin = atob(base64); const len = bin.length; const bytes = new Uint8Array(len);
+  for(let i=0;i<len;i++) bytes[i]=bin.charCodeAt(i);
+  return new Blob([bytes], {type:mime});
+}
+function downloadBlob(blob, filename){
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},1000);
+}
+function cssId(s){return String(s).replace(/[^a-zA-Z0-9_-]/g,'_')}
+function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+</script>
+</body>
+</html>
