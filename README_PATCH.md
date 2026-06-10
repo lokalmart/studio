@@ -1,81 +1,85 @@
-# Lokalmart Studio AI Assistant Patch v1.5.0
+# Lokalmart Studio AI Assistant Home Patch v1.5.1
 
-Patch ini mengembangkan `https://github.com/lokalmart/studio` menjadi Studio + Asisten Lokalmart.
+Patch ini melanjutkan v1.5.0. Perubahan utamanya: **Asisten Lokalmart muncul sebagai kartu fitur di Home Studio**, sejajar dengan:
 
-## Tujuan
+- Import XLSX
+- Input Barcode
+- Asisten Lokalmart
 
-Menambahkan fitur read-first untuk membantu ChatGPT memahami kondisi Odoo Lokalmart tanpa langsung menulis/mengacak database.
+Kartu lama **Modul Berikutnya / Coming Soon** diganti menjadi **Asisten Lokalmart**. Saat diklik, user masuk ke route `/assistant`.
 
-Alur kerja:
+## File utama
 
-1. Target Odoo tetap disimpan di browser lewat `lm_targets_v1`.
-2. Buka `/assistant`.
-3. Jalankan Scan Struktur / Audit Data / Export Konteks.
-4. Download JSON/XLSX.
-5. Upload file export ke ChatGPT.
-6. ChatGPT membuat rekomendasi dan patch XLSX yang aman.
-7. Import patch melalui Studio seperti biasa.
-
-## File yang ditambahkan/diubah
-
-- `api/odoo.js` — replacement endpoint utama, tetap satu Vercel Function.
-- `lib/aiStudio.js` — logic scan, audit, context export, XLSX export, read-only RPC.
-- `public/assistant.html` — UI mobile-first untuk Asisten Lokalmart.
+- `api/odoo.js` — endpoint utama tetap satu Vercel Function.
+- `lib/aiStudio.js` — logic scan struktur, audit data, context export, XLSX export, read-only RPC.
+- `public/assistant.html` — UI modul Asisten Lokalmart.
 - `vercel.json` — tambah route `/assistant` dan `/ai`.
-- `PATCH_index_launcher_snippet.html` — kartu opsional untuk ditambahkan ke launcher Home Studio.
+- `tools/apply-home-launcher.js` — patch otomatis untuk `public/index.html` agar kartu Asisten tampil di Home.
+- `patches/public-index-home-launcher.diff` — diff manual kalau ingin edit lewat GitHub web editor.
+- `PATCH_index_launcher_snippet.html` — snippet manual jika tidak ingin menjalankan script.
 
-## Action API baru
+## Cara pasang cepat
 
-Semua tetap POST ke `/api/odoo`:
+Copy semua isi patch ke root repo `lokalmart/studio`, overwrite file yang sama.
 
-- `ai_health`
-- `ai_schema_scan`
-- `ai_context_export`
-- `ai_data_audit`
-- `ai_export_xlsx`
-- `ai_read_rpc`
-
-`ai_read_rpc` hanya mengizinkan method baca:
-
-- `search_read`
-- `fields_get`
-- `search_count`
-- `read`
-- `search`
-- `name_search`
-
-Tidak ada `create`, `write`, `unlink`, atau import otomatis dari AI.
-
-## Cara pasang
-
-Copy isi folder patch ke root repo `lokalmart/studio`, overwrite file yang sama.
-
-Struktur setelah dipasang:
-
-```txt
-api/odoo.js
-lib/aiStudio.js
-public/assistant.html
-vercel.json
-```
-
-Lalu jalankan:
+Lalu dari root repo jalankan:
 
 ```bash
-npm install
-npm run lint
-vercel --prod
+node tools/apply-home-launcher.js
 ```
 
-Atau jika lewat GitHub web editor:
+Commit perubahan:
 
-1. buka repo `lokalmart/studio`
-2. upload/timpa file sesuai path
-3. commit ke main
-4. Vercel auto redeploy
-5. buka `https://NAMA-PROJECT.vercel.app/assistant`
+```bash
+git add api lib public vercel.json docs tools patches README_PATCH.md PATCH_index_launcher_snippet.html
+git commit -m "Add Asisten Lokalmart module to Studio home launcher"
+git push
+```
 
-## Catatan keamanan
+Setelah Vercel redeploy, buka homepage Studio. Kartu fitur harus menjadi:
 
-Patch ini masih mengikuti model Studio lama: target Odoo disimpan di browser admin internal.
-Gunakan hanya di perangkat pribadi/admin, bukan komputer umum.
+```txt
+Import XLSX | Input Barcode | Asisten Lokalmart
+```
+
+Klik **Asisten Lokalmart** akan membuka:
+
+```txt
+/assistant
+```
+
+## Edit manual jika lewat GitHub web editor
+
+Di `public/index.html`, cari kartu ini:
+
+```html
+<div class="featureCard disabled"><div><div class="featureIcon"></div><h2>Modul Berikutnya</h2><p>Kasir mitra, katalog vendor, kurir, surveyor, dan dashboard koloni akan masuk sebagai fitur superapp berikutnya.</p></div><span class="pill warn">Coming Soon</span></div>
+```
+
+Ganti dengan:
+
+```html
+<div class="featureCard" data-feature="assistant"><div><div class="featureIcon">🤖</div><h2>Asisten Lokalmart</h2><p>Scan struktur Odoo, audit data, dan export konteks untuk ChatGPT sebelum membuat patch XLSX.</p></div><button class="secondary">Masuk Asisten</button></div>
+```
+
+Lalu di `function wire()`, cari handler:
+
+```js
+document.querySelectorAll('[data-feature="import"]').forEach(el=>el.onclick=()=>goSlide(1));document.querySelectorAll('[data-feature="barcode"]').forEach(el=>el.onclick=()=>goSlide(5));const dz=$('dropZone');
+```
+
+Ganti menjadi:
+
+```js
+document.querySelectorAll('[data-feature="import"]').forEach(el=>el.onclick=()=>goSlide(1));document.querySelectorAll('[data-feature="barcode"]').forEach(el=>el.onclick=()=>goSlide(5));document.querySelectorAll('[data-feature="assistant"]').forEach(el=>el.onclick=()=>{location.href='/assistant'});const dz=$('dropZone');
+```
+
+## Catatan
+
+Route `/assistant` sudah ditambahkan di `vercel.json`:
+
+```json
+{ "source": "/assistant", "destination": "/public/assistant.html" }
+```
+
+Jadi bila setelah deploy klik masih 404, cek apakah `vercel.json` sudah ikut ter-commit dan Vercel sudah redeploy.

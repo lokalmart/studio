@@ -1,3 +1,7 @@
+# Lokalmart Studio AI Assistant v1.5.1
+
+Update: modul Asisten Lokalmart kini bisa dibuka dari kartu Home Studio, sejajar dengan Import XLSX dan Input Barcode.
+
 # Asisten Lokalmart Studio
 
 Asisten Lokalmart Studio adalah modul read-first untuk membaca keadaan Odoo Lokalmart, melakukan audit awal, lalu menghasilkan bahan konteks untuk ChatGPT.

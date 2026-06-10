@@ -1,0 +1,14 @@
+diff --git a/public/index.html b/public/index.html
+--- a/public/index.html
++++ b/public/index.html
+@@ -671,7 +671,7 @@
+   <div class="featureCard" data-feature="import"><div><div class="featureIcon"></div><h2>Import XLSX</h2><p>Upload, edit, kalibrasi, preview, preflight, import data, lalu pasang foto produk.</p></div><button>Masuk Import XLSX</button></div>
+ 
+   <div class="featureCard" data-feature="barcode"><div><div class="featureIcon"></div><h2>Input Barcode</h2><p>Scan barcode produk, cari record, lalu siapkan update harga, stok, atau foto.</p></div><button class="secondary">Buka Scanner</button></div>
+-  <div class="featureCard disabled"><div><div class="featureIcon"></div><h2>Modul Berikutnya</h2><p>Kasir mitra, katalog vendor, kurir, surveyor, dan dashboard koloni akan masuk sebagai fitur superapp berikutnya.</p></div><span class="pill warn">Coming Soon</span></div>
++  <div class="featureCard" data-feature="assistant"><div><div class="featureIcon">🤖</div><h2>Asisten Lokalmart</h2><p>Scan struktur Odoo, audit data, dan export konteks untuk ChatGPT sebelum membuat patch XLSX.</p></div><button class="secondary">Masuk Asisten</button></div>
+ 
+   </div>
+@@ -876,6 +876,7 @@
+-  document.querySelectorAll('[data-feature="import"]').forEach(el=>el.onclick=()=>goSlide(1));document.querySelectorAll('[data-feature="barcode"]').forEach(el=>el.onclick=()=>goSlide(5));const dz=$('dropZone');
++  document.querySelectorAll('[data-feature="import"]').forEach(el=>el.onclick=()=>goSlide(1));document.querySelectorAll('[data-feature="barcode"]').forEach(el=>el.onclick=()=>goSlide(5));document.querySelectorAll('[data-feature="assistant"]').forEach(el=>el.onclick=()=>{location.href='/assistant'});const dz=$('dropZone');

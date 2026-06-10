@@ -1,9 +1,16 @@
-<!-- Tambahkan kartu ini di launcherGrid public/index.html agar Asisten muncul di Home Studio. -->
-<div class="featureCard" onclick="location.href='/assistant'">
+<!-- Ganti kartu "Modul Berikutnya" di launcherGrid public/index.html dengan kartu ini. -->
+<div class="featureCard" data-feature="assistant">
   <div>
     <div class="featureIcon">🤖</div>
     <h2>Asisten Lokalmart</h2>
-    <p>Scan struktur Odoo, audit data, export konteks JSON/XLSX untuk dianalisis ChatGPT sebelum membuat patch import.</p>
+    <p>Scan struktur Odoo, audit data, dan export konteks untuk ChatGPT sebelum membuat patch XLSX.</p>
   </div>
-  <button>Masuk Asisten</button>
+  <button class="secondary">Masuk Asisten</button>
 </div>
+
+<!-- Tambahkan handler ini di function wire(), setelah handler import/barcode. -->
+<script>
+document.querySelectorAll('[data-feature="assistant"]').forEach(el => {
+  el.onclick = () => { location.href = '/assistant'; };
+});
+</script>
