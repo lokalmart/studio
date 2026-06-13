@@ -11,7 +11,7 @@ const {
   buildContextExport,
   buildDataAudit,
   buildAssistantXlsxExport,
-  readOnlyRpc
+  readOnlyRpc,
 } = require('../lib/aiStudio');
 
 module.exports = async function handler(req, res) {
@@ -31,6 +31,10 @@ module.exports = async function handler(req, res) {
     const target = body.target || {};
     const payload = body.payload || {};
 
+    if (!action) {
+      return sendJson(res, 400, { ok: false, error: 'Action wajib diisi.' });
+    }
+
     if (action === 'preview_xlsx') {
       return sendJson(res, 200, { ok: true, ...previewWorkbook(payload.fileBase64) });
     }
@@ -43,27 +47,32 @@ module.exports = async function handler(req, res) {
       const odoo = new OdooClient(target);
       const uid = await odoo.authenticate();
       let version = null;
-      try { version = await odoo.version(); } catch (_) {}
+      try {
+        version = await odoo.version();
+      } catch (_) {}
       return sendJson(res, 200, { ok: true, uid, version });
     }
 
     if (action === 'import_sheet_batch' || action === 'import_native_sheet_batch') {
       const odoo = new OdooClient(target);
       await odoo.authenticate();
+
       const { sheet, model, rows, total, offset, limit } = getRowsForSheet(
         payload.fileBase64,
         payload.sheet,
         payload.offset || 0,
-        payload.limit || 50
+        payload.limit || 50,
       );
+
       const report = await importSheetBatch({
         odoo,
         sheet,
         model: payload.model || model,
         rows,
-        mode: action === 'import_native_sheet_batch' ? 'super_fast' : (payload.mode || 'normal'),
-        options: payload.options || {}
+        mode: action === 'import_native_sheet_batch' ? 'super_fast' : payload.mode || 'normal',
+        options: payload.options || {},
       });
+
       return sendJson(res, 200, {
         ok: true,
         sheet,
@@ -73,20 +82,28 @@ module.exports = async function handler(req, res) {
         limit,
         next_offset: offset + rows.length,
         done: offset + rows.length >= total,
-        report
+        report,
       });
     }
 
     if (action === 'import_product_images_batch') {
       const odoo = new OdooClient(target);
       await odoo.authenticate();
+
       const { sheet, rows, total, offset, limit } = getRowsForSheet(
         payload.fileBase64,
         payload.sheet || 'photo_import_queue',
         payload.offset || 0,
-        payload.limit || 10
+        payload.limit || 10,
       );
-      const report = await importPhotoBatch({ odoo, sheet, rows, options: payload.options || {} });
+
+      const report = await importPhotoBatch({
+        odoo,
+        sheet,
+        rows,
+        options: payload.options || {},
+      });
+
       return sendJson(res, 200, {
         ok: true,
         sheet,
@@ -95,12 +112,12 @@ module.exports = async function handler(req, res) {
         limit,
         next_offset: offset + rows.length,
         done: offset + rows.length >= total,
-        report
+        report,
       });
     }
 
     // Lokalmart Studio AI Assistant - read-first actions.
-    // These actions intentionally do not create/write/unlink Odoo records.
+    // Semua action di bawah ini hanya membaca/export; tidak create/write/unlink record Odoo.
     if (action === 'ai_health') {
       const odoo = new OdooClient(target);
       await odoo.authenticate();
