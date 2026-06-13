@@ -5,894 +5,134 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Asisten Lokalmart Studio</title>
   <style>
-    :root {
-      --bg: #0f172a;
-      --panel: rgba(255,255,255,.08);
-      --panel2: rgba(255,255,255,.12);
-      --text: #f8fafc;
-      --muted: #cbd5e1;
-      --line: rgba(255,255,255,.16);
-      --accent: #f59e0b;
-      --accent2: #22c55e;
-      --danger: #ef4444;
-      --warn: #f97316;
-      --info: #38bdf8;
-      --shadow: 0 20px 70px rgba(0,0,0,.35);
-      --radius: 24px;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 20% 15%, rgba(245,158,11,.28), transparent 34%),
-        radial-gradient(circle at 85% 20%, rgba(34,197,94,.18), transparent 30%),
-        radial-gradient(circle at 55% 90%, rgba(56,189,248,.16), transparent 35%),
-        var(--bg);
-      overflow: hidden;
-    }
-
-    a { color: inherit; text-decoration: none; }
-    button, input, textarea, select { font: inherit; }
-
-    .app {
-      height: 100dvh;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      padding: max(14px, env(safe-area-inset-top)) 14px max(12px, env(safe-area-inset-bottom));
-      gap: 12px;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(15,23,42,.76);
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .logo {
-      width: 36px;
-      height: 36px;
-      display: grid;
-      place-items: center;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(245,158,11,.95), rgba(34,197,94,.9));
-      font-weight: 900;
-      color: #111827;
-      flex: 0 0 auto;
-    }
-
-    .brand strong,
-    .brand small {
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .brand strong { font-size: 14px; }
-    .brand small { color: var(--muted); font-size: 11px; margin-top: 1px; }
-
-    .pill {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.08);
-      color: var(--text);
-      border-radius: 999px;
-      padding: 9px 12px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      cursor: pointer;
-      min-height: 38px;
-      transition: transform .2s ease, background .2s ease, border-color .2s ease;
-      white-space: nowrap;
-    }
-
-    .pill:hover { transform: translateY(-1px); background: rgba(255,255,255,.14); }
-    .pill.primary { background: rgba(245,158,11,.94); color: #111827; border-color: rgba(245,158,11,.95); font-weight: 800; }
-    .pill.green { background: rgba(34,197,94,.92); color: #07130b; border-color: rgba(34,197,94,.95); font-weight: 800; }
-    .pill.red { background: rgba(239,68,68,.88); color: white; border-color: rgba(239,68,68,.95); }
-    .pill:disabled { opacity: .55; cursor: not-allowed; transform: none; }
-
-    .main {
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(15,23,42,.62);
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow);
-      position: relative;
-    }
-
-    .track {
-      height: 100%;
-      display: flex;
-      transition: transform .38s cubic-bezier(.2,.8,.2,1);
-      will-change: transform;
-    }
-
-    .slide {
-      flex: 0 0 100%;
-      min-width: 100%;
-      height: 100%;
-      overflow: hidden;
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
-
-    .slide-head {
-      padding: 18px 18px 12px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .slide-head h1 {
-      margin: 0;
-      font-size: clamp(23px, 6vw, 42px);
-      letter-spacing: -.04em;
-      line-height: 1.02;
-    }
-
-    .slide-head p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      max-width: 860px;
-      line-height: 1.45;
-    }
-
-    .content {
-      overflow: auto;
-      padding: 16px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: var(--panel);
-      padding: 15px;
-      min-height: 160px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .card h2, .card h3 { margin: 0; }
-    .card h2 { font-size: 19px; }
-    .card h3 { font-size: 15px; }
-    .card p { margin: 0; color: var(--muted); line-height: 1.45; }
-    .card .spacer { flex: 1; }
-
-    .badge {
-      display: inline-flex;
-      width: fit-content;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 9px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.1);
-      border: 1px solid var(--line);
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .stat {
-      border: 1px solid var(--line);
-      background: var(--panel);
-      border-radius: 18px;
-      padding: 13px;
-    }
-
-    .stat b { display: block; font-size: 28px; line-height: 1; }
-    .stat span { color: var(--muted); font-size: 12px; }
-
-    .list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .issue {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.07);
-      border-radius: 18px;
-      padding: 12px;
-    }
-
-    .issue strong { display: block; margin-bottom: 5px; }
-    .issue small { color: var(--muted); display: block; line-height: 1.45; }
-    .critical { border-color: rgba(239,68,68,.55); }
-    .high { border-color: rgba(249,115,22,.55); }
-    .medium { border-color: rgba(245,158,11,.55); }
-    .low { border-color: rgba(56,189,248,.45); }
-
-    pre {
-      margin: 0;
-      white-space: pre-wrap;
-      word-break: break-word;
-      color: #e2e8f0;
-      background: rgba(2,6,23,.72);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      min-height: 280px;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .target-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
-      gap: 12px;
-    }
-
-    .targets { display: grid; gap: 10px; }
-    .target-row {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 12px;
-      background: var(--panel);
-      display: grid;
-      gap: 8px;
-    }
-
-    .target-row.active { border-color: rgba(34,197,94,.85); background: rgba(34,197,94,.11); }
-    .target-row strong { display: block; }
-    .target-row small { color: var(--muted); word-break: break-word; }
-    .row-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-
-    .form {
-      display: grid;
-      gap: 10px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: var(--panel);
-      padding: 14px;
-    }
-
-    label { display: grid; gap: 6px; color: var(--muted); font-size: 12px; }
-    input, textarea, select {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: rgba(2,6,23,.54);
-      color: var(--text);
-      border-radius: 14px;
-      padding: 12px;
-      outline: none;
-    }
-
-    textarea { min-height: 110px; resize: vertical; }
-
-    .bottom {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .progress {
-      height: 10px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.08);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transition: width .25s ease;
-    }
-
-    .navs { display: flex; align-items: center; gap: 8px; }
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 82px;
-      transform: translateX(-50%) translateY(20px);
-      opacity: 0;
-      pointer-events: none;
-      background: rgba(2,6,23,.88);
-      border: 1px solid var(--line);
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 999px;
-      box-shadow: var(--shadow);
-      transition: .25s ease;
-      max-width: calc(100vw - 28px);
-      text-align: center;
-      z-index: 20;
-    }
-
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-    .hidden { display: none !important; }
-
-    @media (max-width: 860px) {
-      .hero-grid { grid-template-columns: 1fr; }
-      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .target-grid { grid-template-columns: 1fr; }
-      .brand small { display: none; }
-      .topbar { border-radius: 22px; }
-      .pill .wide { display: none; }
-    }
+    :root{--bg:#07101d;--panel:#101d33;--panel2:#162640;--line:#263854;--text:#f4f8ff;--muted:#9fb1ce;--accent:#56e4ff;--accent2:#a88bff;--ok:#39dc86;--warn:#ffd166;--err:#ff6473;--radius:24px}
+    *{box-sizing:border-box}html,body{height:100%;margin:0;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at 10% 0%,#263d74 0,#091322 38%,#050914 100%);color:var(--text)}
+    button,input,select,textarea{font:inherit}button{border:0;border-radius:16px;min-height:44px;padding:10px 14px;font-weight:900;cursor:pointer;color:#06111e;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 14px 36px #0008}button.secondary{background:#1a2947;color:var(--text);border:1px solid var(--line);box-shadow:none}button.ghost{background:transparent;color:var(--text);border:1px solid var(--line);box-shadow:none}button:disabled{opacity:.45;cursor:not-allowed}.mini{min-height:34px;border-radius:12px;padding:7px 10px;font-size:12px}.muted{color:var(--muted)}.small{font-size:12px}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;background:#1f3152;padding:7px 10px;color:#cfdbf6;font-size:12px;font-weight:850;text-decoration:none}.pill.ok{border-color:#2c9a65;color:#caffdf}.pill.warn{border-color:#8b742c;color:#ffe8a6}.pill.err{border-color:#9c3a49;color:#ffd8dd}
+    .app{height:100dvh;display:grid;grid-template-rows:70px 1fr 72px;overflow:hidden}.topbar,.bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:rgba(6,11,21,.82);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08);z-index:4}.bottom{border-top:1px solid rgba(255,255,255,.08);border-bottom:0}.brand{display:flex;align-items:center;gap:12px;min-width:0}.logo{width:44px;height:44px;border-radius:16px;background:conic-gradient(from 220deg,#fb923c,#56e4ff,#a88bff,#39dc86,#fb923c)}.brand b{display:block;letter-spacing:-.03em}.brand span{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55vw}.viewport{overflow:hidden}.track{height:100%;display:flex;transition:transform .42s cubic-bezier(.2,.9,.2,1)}.slide{height:100%;min-width:100%;padding:14px;overflow:hidden;display:flex;flex-direction:column;gap:12px}.head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-height:76px}.head h1{margin:0;font-size:clamp(23px,5vw,44px);line-height:.96;letter-spacing:-.055em}.head p{margin:7px 0 0;color:var(--muted);font-size:14px}.body{min-height:0;flex:1;display:grid;gap:12px}.panel{background:linear-gradient(180deg,rgba(18,31,55,.94),rgba(10,18,34,.94));border:1px solid rgba(255,255,255,.09);border-radius:var(--radius);box-shadow:0 18px 60px #0007;padding:14px;min-height:0;overflow:hidden}.scroll{min-height:0;overflow:auto;overscroll-behavior:contain}.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;height:100%}.card{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:14px;padding:18px;border-radius:28px;border:1px solid rgba(255,255,255,.1);background:radial-gradient(circle at 100% 0%,rgba(86,228,255,.18),transparent 40%),linear-gradient(180deg,rgba(22,38,67,.96),rgba(10,18,34,.94));min-height:210px}.card h2{margin:0;font-size:24px;letter-spacing:-.03em}.card p{color:var(--muted);font-size:14px}.num{font-size:13px;font-weight:950;color:#9bdfff}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#0b1426;border:1px solid var(--line);border-radius:18px;padding:12px;min-width:0}.stat b{display:block;font-size:24px}.stat span{display:block;margin-top:4px;font-size:12px;color:var(--muted)}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;height:100%;min-height:0}.list{display:grid;gap:8px}.issue,.rowCard{border:1px solid var(--line);background:#0b1426;border-radius:16px;padding:10px}.issue.critical{border-color:#9c3a49}.issue.high{border-color:#e08d34}.issue.medium{border-color:#8b742c}.issue.low{border-color:#405c88}.rowCard{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.rowCard.active{border-color:#6ee7ff;background:#13233f}.rowCard b{display:block}.log{height:100%;min-height:0;overflow:auto;background:#050a13;border:1px solid var(--line);border-radius:20px;padding:12px;white-space:pre-wrap;font-size:12px;line-height:1.45}.field{display:flex;flex-direction:column;gap:6px;margin:0 0 10px}.field label{font-size:12px;color:var(--muted);font-weight:900}.field input,.field select,.field textarea{width:100%;min-height:44px;background:#091222;border:1px solid var(--line);border-radius:15px;color:var(--text);padding:10px 11px;outline:none}.field textarea{min-height:110px;resize:vertical}.targetCard{border:1px solid var(--line);background:#0b1426;border-radius:18px;padding:12px;display:flex;justify-content:space-between;gap:10px}.targetCard.active{border-color:#6ee7ff;background:#13233f}.dots{display:flex;gap:6px;overflow:auto}.dot{width:36px;height:36px;border-radius:14px;border:1px solid var(--line);background:#0d1729;color:#b9c7df;display:grid;place-items:center;font-weight:900;font-size:12px;cursor:pointer}.dot.active{background:linear-gradient(135deg,#193562,#2b1b54);color:#fff;border-color:#6ee7ff}.jsonBox{height:100%;min-height:0;overflow:auto;background:#050a13;border:1px solid var(--line);border-radius:20px;padding:12px;white-space:pre-wrap;font-size:11px;line-height:1.4}.progress{height:12px;border-radius:99px;background:#060b15;border:1px solid var(--line);overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s ease}.tree{font-size:12px;line-height:1.45}.tree div{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.05)}
+    @media(max-width:1100px){.grid4{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:900px){.grid4{grid-template-columns:1fr}.two{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.card{min-height:145px}.head{min-height:100px}.brand span{max-width:42vw}.toolbar{max-width:55vw;justify-content:flex-end}}
   </style>
 </head>
 <body>
-  <div class="app">
-    <header class="topbar">
-      <a class="brand" href="/" aria-label="Kembali ke Studio">
-        <span class="logo">LM</span>
-        <span>
-          <strong>Asisten Lokalmart Studio</strong>
-          <small id="targetLabel">Target Odoo belum dipilih</small>
-        </span>
-      </a>
-      <div class="navs">
-        <button class="pill" id="btnSettings" type="button">⚙️ <span class="wide">Target</span></button>
-        <a class="pill" href="/">Studio</a>
-      </div>
-    </header>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="logo"></div><div><b>Asisten Lokalmart Studio</b><span id="activeTargetText">Target Odoo belum dipilih</span></div></div>
+    <div class="toolbar"><button class="secondary mini" id="btnSettings">⚙️ Target</button><a href="/" class="pill">Studio</a></div>
+  </header>
 
-    <main class="main">
-      <div class="track" id="track">
-        <section class="slide">
-          <div class="slide-head">
-            <div class="badge">Read-first · tidak menulis record Odoo</div>
-            <h1>AI pendamping Odoo Lokalmart.</h1>
-            <p>Baca database, scan struktur, audit data, lalu ekspor konteks JSON/XLSX untuk dianalisis ChatGPT sebelum membuat patch import.</p>
-          </div>
-          <div class="content">
-            <div class="hero-grid">
-              <article class="card">
-                <span class="badge">01</span>
-                <h2>Scan Struktur</h2>
-                <p>Model, field, custom x_, risky many2one, dan ringkasan jumlah record.</p>
-                <div class="spacer"></div>
-                <button class="pill primary" id="btnScan" type="button">Mulai Scan</button>
-              </article>
-              <article class="card">
-                <span class="badge">02</span>
-                <h2>Audit Data</h2>
-                <p>Cek produk, barcode, kategori, partner, task, dan field custom rawan error.</p>
-                <div class="spacer"></div>
-                <button class="pill primary" id="btnAudit" type="button">Mulai Audit</button>
-              </article>
-              <article class="card">
-                <span class="badge">03</span>
-                <h2>Export Konteks</h2>
-                <p>Ambil JSON/XLSX yang bisa diupload ke ChatGPT agar patch berikutnya lebih aman.</p>
-                <div class="spacer"></div>
-                <button class="pill green" id="btnContext" type="button">Export JSON</button>
-              </article>
-            </div>
-          </div>
-        </section>
+  <main class="viewport">
+    <div class="track" id="track">
+      <section class="slide" data-title="Home">
+        <div class="head"><div><h1>AI pendamping Odoo Lokalmart.</h1><p>Baca database, scan struktur, audit data, export konteks global, atau export satu project terpilih agar ChatGPT memahami perkembangan terakhir.</p></div><span class="pill" id="statusPill">Read-first</span></div>
+        <div class="body grid4">
+          <div class="card"><div><div class="num">01</div><h2>Scan Struktur</h2><p>Model, field, custom x_, risky many2one, dan ringkasan jumlah record.</p></div><button id="runSchema">Mulai Scan</button></div>
+          <div class="card"><div><div class="num">02</div><h2>Audit Data</h2><p>Cek produk, barcode, kategori, partner, task, dan field custom rawan error.</p></div><button id="runAudit">Mulai Audit</button></div>
+          <div class="card"><div><div class="num">03</div><h2>Export Konteks</h2><p>Ambil JSON/XLSX global yang bisa diupload ke ChatGPT agar patch berikutnya lebih aman.</p></div><button id="runContext">Export JSON</button></div>
+          <div class="card"><div><div class="num">04</div><h2>Export Project Terpilih</h2><p>Pilih satu project Odoo, lalu export project + task/subtask + milestone + update + chatter ringkas.</p></div><button id="openProjectExport">Pilih Project</button></div>
+        </div>
+      </section>
 
-        <section class="slide">
-          <div class="slide-head">
-            <h1>Ringkasan Audit</h1>
-            <p>Masalah dipisah critical, high, medium, dan low supaya import berikutnya lebih aman.</p>
-          </div>
-          <div class="content">
-            <div class="row-actions" style="margin-bottom:12px">
-              <button class="pill" id="btnDownloadAudit" type="button">Download JSON</button>
-              <button class="pill green" id="btnXlsx" type="button">Download XLSX</button>
-            </div>
-            <div class="stats">
-              <div class="stat"><b id="criticalCount">0</b><span>Critical</span></div>
-              <div class="stat"><b id="highCount">0</b><span>High</span></div>
-              <div class="stat"><b id="mediumCount">0</b><span>Medium</span></div>
-              <div class="stat"><b id="lowCount">0</b><span>Low</span></div>
-            </div>
-            <div class="hero-grid" style="grid-template-columns:1fr 1fr">
-              <div class="card">
-                <h3>Issue utama</h3>
-                <div class="list" id="issueList"><p>Belum ada audit.</p></div>
-              </div>
-              <div class="card">
-                <h3>Rekomendasi</h3>
-                <div class="list" id="recommendationList"><p>Belum ada rekomendasi.</p></div>
-              </div>
-            </div>
-          </div>
-        </section>
+      <section class="slide" data-title="Project">
+        <div class="head"><div><h1>Export Project Terpilih</h1><p>Muat daftar project dari Odoo, pilih satu record, lalu export konteks yang bisa dibaca ChatGPT untuk mengembangkan isi project.</p></div><div class="toolbar"><button class="secondary mini" id="reloadProjects">Muat Project</button><button class="mini" id="exportProjectJson">Export JSON</button><button class="mini" id="exportProjectXlsx">Download XLSX</button></div></div>
+        <div class="body two">
+          <div class="panel"><div class="toolbar" style="margin-bottom:10px"><input id="projectSearch" placeholder="Cari project, misal: Ground Zero" style="flex:1;min-width:180px;min-height:42px;background:#091222;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:10px"><select id="projectLimit" style="min-height:42px;background:#091222;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:10px"><option value="40">40</option><option value="80" selected>80</option><option value="150">150</option></select></div><div class="scroll list" id="projectList"><div class="muted">Klik “Muat Project” untuk membaca project dari Odoo.</div></div></div>
+          <div class="panel"><h3>Project dipilih</h3><div id="selectedProjectBox" class="muted">Belum ada project dipilih.</div><h3>Preview task hierarchy</h3><div class="scroll tree" id="projectTreePreview"><div class="muted">Export JSON dulu untuk melihat preview hierarchy.</div></div><div class="toolbar" style="margin-top:10px"><button class="secondary mini" id="copyProjectPrompt">Copy Prompt ChatGPT</button><button class="secondary mini" id="downloadProjectJson">Download JSON</button></div></div>
+        </div>
+      </section>
 
-        <section class="slide">
-          <div class="slide-head">
-            <h1>File untuk ChatGPT</h1>
-            <p>Gunakan export JSON/XLSX ini sebagai bahan untuk membaca kondisi Odoo Lokalmart.</p>
-          </div>
-          <div class="content">
-            <div class="row-actions" style="margin-bottom:12px">
-              <button class="pill" id="btnDownloadContext" type="button">Download Context JSON</button>
-              <button class="pill" id="btnCopy" type="button">Copy Ringkasan</button>
-            </div>
-            <pre id="jsonBox">Belum ada export.</pre>
-          </div>
-        </section>
+      <section class="slide" data-title="Audit">
+        <div class="head"><div><h1>Ringkasan Audit</h1><p>Masalah dipisah critical, high, medium, dan low supaya import berikutnya lebih aman.</p></div><div class="toolbar"><button class="secondary mini" id="downloadAudit">Download JSON</button><button class="mini" id="downloadXlsx">Download XLSX</button></div></div>
+        <div class="body two">
+          <div class="panel"><div class="stats"><div class="stat"><b id="sCritical">0</b><span>Critical</span></div><div class="stat"><b id="sHigh">0</b><span>High</span></div><div class="stat"><b id="sMedium">0</b><span>Medium</span></div><div class="stat"><b id="sLow">0</b><span>Low</span></div></div><h3>Issue utama</h3><div class="scroll list" id="issueList"><div class="muted">Belum ada audit.</div></div></div>
+          <div class="panel"><h3>Rekomendasi</h3><div class="scroll list" id="recommendations"><div class="muted">Belum ada rekomendasi.</div></div></div>
+        </div>
+      </section>
 
-        <section class="slide">
-          <div class="slide-head">
-            <h1>Target Odoo</h1>
-            <p>Menggunakan target yang sama dengan Studio. Disimpan di browser perangkat ini dengan key <code>lm_targets_v1</code>.</p>
-          </div>
-          <div class="content">
-            <div class="target-grid">
-              <div>
-                <div class="row-actions" style="margin-bottom:12px">
-                  <button class="pill" id="btnReloadTargets" type="button">Reload</button>
-                </div>
-                <h3>Target tersimpan</h3>
-                <div class="targets" id="targetList"></div>
-              </div>
-              <form class="form" id="targetForm">
-                <h3>Tambah / Edit cepat</h3>
-                <label>Nama <input id="targetName" placeholder="Odoo Lokalmart" autocomplete="off" /></label>
-                <label>URL <input id="targetUrl" placeholder="https://edu-lokalmart.odoo.com" autocomplete="off" /></label>
-                <label>Database <input id="targetDb" placeholder="edu-lokalmart" autocomplete="off" /></label>
-                <label>Username <input id="targetUsername" placeholder="email login Odoo" autocomplete="username" /></label>
-                <label>Password / API Key <input id="targetPassword" type="password" placeholder="password atau API key" autocomplete="current-password" /></label>
-                <div class="row-actions">
-                  <button class="pill primary" type="submit">Simpan</button>
-                  <button class="pill" id="btnTest" type="button">Tes</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </section>
+      <section class="slide" data-title="Konteks">
+        <div class="head"><div><h1>File untuk ChatGPT</h1><p>Gunakan export JSON/XLSX ini sebagai bahan untuk membaca kondisi Odoo Lokalmart.</p></div><div class="toolbar"><button class="secondary mini" id="downloadContext">Download Context JSON</button><button class="mini" id="copySummary">Copy Ringkasan</button></div></div>
+        <div class="body"><div class="panel"><div class="progress"><div class="bar" id="bar"></div></div><pre class="jsonBox" id="jsonBox">Belum ada export.</pre></div></div>
+      </section>
 
-        <section class="slide">
-          <div class="slide-head">
-            <h1>Log</h1>
-            <p>Catatan proses untuk troubleshooting.</p>
-          </div>
-          <div class="content">
-            <div class="row-actions" style="margin-bottom:12px">
-              <button class="pill" id="btnClearLog" type="button">Clear</button>
-            </div>
-            <pre id="logBox">Siap.</pre>
-          </div>
-        </section>
-      </div>
-    </main>
+      <section class="slide" data-title="Target">
+        <div class="head"><div><h1>Target Odoo</h1><p>Menggunakan target yang sama dengan Studio. Disimpan di browser perangkat ini dengan key <span class="mono">lm_targets_v1</span>.</p></div><button class="secondary mini" id="reloadTargets">Reload</button></div>
+        <div class="body two">
+          <div class="panel"><h3>Target tersimpan</h3><div class="scroll list" id="targetList"></div></div>
+          <div class="panel"><h3>Tambah / Edit cepat</h3><div class="field"><label>Nama</label><input id="setName" placeholder="Odoo Lokalmart Utama"></div><div class="field"><label>URL</label><input id="setUrl" placeholder="https://example.odoo.com"></div><div class="field"><label>Database</label><input id="setDb"></div><div class="field"><label>Username</label><input id="setUsername"></div><div class="field"><label>Password / API Key</label><input id="setPassword" type="password"></div><div class="toolbar"><button id="saveTarget">Simpan</button><button class="secondary" id="testTarget">Tes</button></div><div class="muted small" id="testResult"></div></div>
+        </div>
+      </section>
 
-    <footer class="bottom">
-      <button class="pill" id="prevBtn" type="button">←</button>
-      <div class="progress"><div class="bar" id="bar"></div></div>
-      <button class="pill" id="nextBtn" type="button">→</button>
-    </footer>
-  </div>
+      <section class="slide" data-title="Log">
+        <div class="head"><div><h1>Log</h1><p>Catatan proses untuk troubleshooting.</p></div><button class="secondary mini" id="clearLog">Clear</button></div>
+        <div class="body"><pre class="log" id="log">Siap.</pre></div>
+      </section>
+    </div>
+  </main>
 
-  <div class="toast" id="toast"></div>
+  <footer class="bottom"><button class="secondary mini" id="prev">←</button><div class="dots" id="dots"></div><button class="secondary mini" id="next">→</button></footer>
+</div>
 
-  <script>
-    const API = '/api/odoo';
-    const TARGET_KEY = 'lm_targets_v1';
-    const ACTIVE_TARGET_KEY = 'lm_active_target_id';
+<script>
+const API='/api/odoo';
+const KEY='lm_targets_v1';
+const $=id=>document.getElementById(id);
+const slides=[...document.querySelectorAll('.slide')];
+const state={slide:0,targets:[],activeTargetId:null,lastAudit:null,lastContext:null,lastScan:null,lastProjectContext:null,projects:[],selectedProjectId:null,logs:[]};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 
-    const $ = (id) => document.getElementById(id);
-    const state = {
-      slide: 0,
-      targets: [],
-      activeTargetId: '',
-      lastAudit: null,
-      lastContext: null,
-      busy: false,
-    };
+function log(msg,data){
+  const item={time:new Date().toISOString(),msg,data:data||null};
+  state.logs.push(item);
+  $('log').textContent+=`\n[${new Date().toLocaleTimeString()}] ${msg}\n${data?JSON.stringify(data,null,2)+'\n':''}`;
+  $('log').scrollTop=$('log').scrollHeight;
+}
+function setBusy(on){$('statusPill').textContent=on?'Memproses...':'Read-first';$('statusPill').className='pill '+(on?'warn':'');document.querySelectorAll('button').forEach(b=>{if(!['prev','next'].includes(b.id))b.disabled=on});}
+function activeTarget(){return state.targets.find(t=>t.id===state.activeTargetId)||null}
+function targetPayload(){const t=activeTarget();if(!t)throw new Error('Target Odoo belum dipilih. Buka slide Target dulu.');return {url:t.url,db:t.db,username:t.username,password:t.password}}
+async function post(action,payload={}){setBusy(true);try{const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,target:targetPayload(),payload})});let json;try{json=await res.json()}catch(e){throw new Error('Server mengembalikan non-JSON. Kemungkinan timeout/error Vercel.')}if(!json.ok)throw new Error(json.error+(json.detail?'\n'+json.detail:''));return json}finally{setBusy(false)}}
 
-    function uid() {
-      return 'lm_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    }
+function goto(i){state.slide=Math.max(0,Math.min(slides.length-1,i));$('track').style.transform=`translateX(${-state.slide*100}%)`;renderDots()}
+function renderDots(){const html=slides.map((s,i)=>`<button class="dot ${i===state.slide?'active':''}" data-slide="${i}" title="${esc(s.dataset.title)}">${i+1}</button>`).join('');$('dots').innerHTML=html;document.querySelectorAll('[data-slide]').forEach(b=>b.onclick=()=>goto(Number(b.dataset.slide)))}
+$('prev').onclick=()=>goto(state.slide-1);$('next').onclick=()=>goto(state.slide+1);$('btnSettings').onclick=()=>goto(4);
 
-    function toast(message) {
-      const el = $('toast');
-      el.textContent = message;
-      el.classList.add('show');
-      clearTimeout(toast.timer);
-      toast.timer = setTimeout(() => el.classList.remove('show'), 2600);
-    }
+function saveTargets(){localStorage.setItem(KEY,JSON.stringify({targets:state.targets,activeTargetId:state.activeTargetId}));renderTargets()}
+function loadTargets(){try{const d=JSON.parse(localStorage.getItem(KEY)||'{}');state.targets=Array.isArray(d.targets)?d.targets:[];state.activeTargetId=d.activeTargetId||state.targets[0]?.id||null}catch{state.targets=[];state.activeTargetId=null}renderTargets()}
+function fillTargetForm(t){if(!t)return;$('setName').value=t.name||'';$('setUrl').value=t.url||'';$('setDb').value=t.db||'';$('setUsername').value=t.username||'';$('setPassword').value=t.password||''}
+function getTargetForm(){return {id:state.activeTargetId||uid(),name:$('setName').value.trim()||'Target Odoo',url:$('setUrl').value.trim(),db:$('setDb').value.trim(),username:$('setUsername').value.trim(),password:$('setPassword').value}}
+function renderTargets(){const t=activeTarget();$('activeTargetText').textContent=t?`${t.name} • ${t.url}`:'Target Odoo belum dipilih';$('targetList').innerHTML=state.targets.length?state.targets.map(x=>`<div class="targetCard ${x.id===state.activeTargetId?'active':''}"><div><b>${esc(x.name)}</b><div class="muted small">${esc(x.url)}<br>${esc(x.db)} • ${esc(x.username)}</div></div><button class="mini secondary" data-target="${x.id}">Pilih</button></div>`).join(''):'<div class="muted">Belum ada target. Tambahkan di kanan.</div>';document.querySelectorAll('[data-target]').forEach(b=>b.onclick=()=>{state.activeTargetId=b.dataset.target;fillTargetForm(activeTarget());saveTargets();log('Target aktif dipilih.',activeTarget())});if(t)fillTargetForm(t)}
+$('saveTarget').onclick=()=>{const t=getTargetForm();if(!t.url||!t.db||!t.username||!t.password)return alert('URL, database, username, dan password/API key wajib diisi.');const i=state.targets.findIndex(x=>x.id===t.id);if(i>=0)state.targets[i]=t;else state.targets.push(t);state.activeTargetId=t.id;saveTargets();log('Target disimpan.',{name:t.name,url:t.url,db:t.db,username:t.username})};
+$('reloadTargets').onclick=loadTargets;
+$('testTarget').onclick=async()=>{try{const t=getTargetForm();const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'test_connection',target:{url:t.url,db:t.db,username:t.username,password:t.password},payload:{}})});const json=await res.json();if(!json.ok)throw new Error(json.error);$('testResult').textContent=`OK UID ${json.uid}`;log('Tes koneksi berhasil.',json)}catch(e){$('testResult').textContent=e.message;log('Tes koneksi gagal.',{error:e.message})}};
 
-    function setBusy(isBusy, label = '') {
-      state.busy = isBusy;
-      for (const id of ['btnScan', 'btnAudit', 'btnContext', 'btnXlsx', 'btnTest']) {
-        const el = $(id);
-        if (el) el.disabled = isBusy;
-      }
-      if (label) toast(label);
-    }
+function renderAudit(a){state.lastAudit=a;$('sCritical').textContent=a?.counts?.critical||0;$('sHigh').textContent=a?.counts?.high||0;$('sMedium').textContent=a?.counts?.medium||0;$('sLow').textContent=a?.counts?.low||0;const issues=(a?.issues||[]).slice(0,80);$('issueList').innerHTML=issues.length?issues.map(x=>`<div class="issue ${esc(x.severity)}"><b>${esc(x.severity)} • ${esc(x.area)} • ${esc(x.model||'')}</b><div>${esc(x.name||'')}</div><div class="muted small">${esc(x.message)}</div></div>`).join(''):'<div class="muted">Tidak ada issue pada limit audit ini.</div>';const rec=a?.recommendations||[];$('recommendations').innerHTML=rec.length?rec.map((x,i)=>`<div class="issue"><b>${i+1}. Rekomendasi</b><div>${esc(x)}</div></div>`).join(''):'<div class="muted">Belum ada rekomendasi.</div>';goto(2)}
+function renderContext(ctx){state.lastContext=ctx;$('jsonBox').textContent=JSON.stringify(ctx,null,2).slice(0,300000);$('bar').style.width='100%';goto(3)}
+function downloadJson(name,obj){const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
+function downloadBase64(filename,mime,base64){const bin=atob(base64);const bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);const blob=new Blob([bytes],{type:mime||'application/octet-stream'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename||'export.xlsx';a.click();URL.revokeObjectURL(a.href)}
+async function copyText(text){try{await navigator.clipboard.writeText(text);log('Teks berhasil dicopy.')}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();log('Teks berhasil dicopy fallback.')}}
 
-    function go(index) {
-      const max = 4;
-      state.slide = Math.max(0, Math.min(max, index));
-      $('track').style.transform = `translateX(-${state.slide * 100}%)`;
-      $('bar').style.width = `${(state.slide / max) * 100}%`;
-    }
+$('runSchema').onclick=async()=>{try{log('Mulai scan struktur.');const res=await post('ai_schema_scan',{limit:500,fieldLimit:1000});state.lastScan=res.scan;renderContext(res.scan);log('Scan struktur selesai.',res.scan.summary)}catch(e){log('Scan gagal.',{error:e.message});alert(e.message)}};
+$('runAudit').onclick=async()=>{try{log('Mulai audit data.');const res=await post('ai_data_audit',{limit:1000});renderAudit(res.audit);state.lastContext=res.audit;$('jsonBox').textContent=JSON.stringify(res.audit,null,2).slice(0,300000);$('bar').style.width='100%';log('Audit selesai.',res.audit.counts)}catch(e){log('Audit gagal.',{error:e.message});alert(e.message)}};
+$('runContext').onclick=async()=>{try{log('Mulai export konteks global.');const res=await post('ai_context_export',{limit:300,externalIdLimit:1000,includeSchema:true});renderContext(res.context);log('Export konteks selesai.',{models:Object.keys(res.context.datasets||{}).length})}catch(e){log('Export konteks gagal.',{error:e.message});alert(e.message)}};
+$('downloadAudit').onclick=()=>state.lastAudit?downloadJson('lokalmart_audit.json',state.lastAudit):alert('Belum ada audit.');
+$('downloadContext').onclick=()=>state.lastContext?downloadJson('lokalmart_context.json',state.lastContext):alert('Belum ada context.');
+$('copySummary').onclick=()=>state.lastContext?copyText(JSON.stringify(state.lastContext.summary||state.lastContext.counts||state.lastContext,null,2)):alert('Belum ada context.');
+$('downloadXlsx').onclick=async()=>{try{log('Membuat XLSX context global.');const res=await post('ai_export_xlsx',{limit:1000,contextLimit:300});downloadBase64(res.export.filename,res.export.mime,res.export.base64);log('XLSX selesai.',res.export.summary)}catch(e){log('XLSX gagal.',{error:e.message});alert(e.message)}};
 
-    function log(message, data) {
-      const line = `[${new Date().toLocaleTimeString('id-ID')}] ${message}`;
-      const extra = data === undefined ? '' : '\n' + JSON.stringify(data, null, 2).slice(0, 5000);
-      $('logBox').textContent = line + extra + '\n\n' + $('logBox').textContent;
-    }
+function selectedProject(){return state.projects.find(p=>Number(p.id)===Number(state.selectedProjectId))||null}
+function renderProjectList(){const rows=state.projects||[];$('projectList').innerHTML=rows.length?rows.map(p=>`<div class="rowCard ${Number(p.id)===Number(state.selectedProjectId)?'active':''}"><div><b>${esc(p.name)}</b><div class="muted small">ID ${p.id} • Task: ${p.task_count??'-'} • Milestone: ${p.milestone_count??'-'}<br>Stage: ${esc(p.stage_name||'-')} • Update: ${esc(p.write_date||'-')}</div></div><button class="mini secondary" data-project-id="${p.id}">Pilih</button></div>`).join(''):'<div class="muted">Project tidak ditemukan.</div>';document.querySelectorAll('[data-project-id]').forEach(b=>b.onclick=()=>{state.selectedProjectId=Number(b.dataset.projectId);renderProjectList();renderSelectedProject();log('Project dipilih.',selectedProject())})}
+function renderSelectedProject(){const p=selectedProject();$('selectedProjectBox').innerHTML=p?`<div class="rowCard active"><div><b>${esc(p.name)}</b><div class="muted small">ID ${p.id}<br>Task: ${p.task_count??'-'} • Milestone: ${p.milestone_count??'-'}<br>Partner: ${esc(p.partner_name||'-')}<br>User: ${esc(p.user_name||'-')}<br>Write date: ${esc(p.write_date||'-')}</div></div></div>`:'<div class="muted">Belum ada project dipilih.</div>'}
+function renderProjectTree(ctx){const roots=ctx?.task_hierarchy||[];function walk(nodes,depth=0,out=[]){for(const n of nodes){out.push(`<div style="padding-left:${8+depth*18}px"><b>${esc(n.name||n.id)}</b> <span class="muted">#${n.id} • ${esc((n.stage_id&&n.stage_id[1])||'-')}</span></div>`);if(n.children&&n.children.length)walk(n.children,depth+1,out)}return out}const html=walk(roots).slice(0,180).join('');$('projectTreePreview').innerHTML=html||'<div class="muted">Tidak ada task dalam project ini.</div>'}
+function makeProjectPrompt(ctx){const s=ctx?.summary||{};return `Saya ingin kamu membaca export JSON/XLSX Project Odoo Lokalmart ini sebagai keadaan terakhir database.\n\nProject: ${s.project_name||'-'}\nProject ID: ${s.project_id||'-'}\nTotal task: ${s.total_tasks||0}\nRoot task: ${s.root_tasks||0}\nSubtask: ${s.subtasks||0}\nMilestone: ${s.milestones||0}\n\nTugas kamu:\n1. Pahami perkembangan terakhir project dari data project, task hierarchy, milestone, update, chatter, dan external_id.\n2. Bandingkan dengan arah diskusi Lokalmart terbaru: Ground Zero sebagai pusat manajemen ide, Lokal ID sebagai portal user Odoo dengan fields/model custom, pivot Lokalmart sebagai distributor/master supplier dengan role Agen/Dropshipper, dan kebutuhan task hierarchy yang rapi.\n3. Usulkan pengembangan isi project tanpa membuat task liar tanpa parent.\n4. Jika membuat XLSX import, gunakan aturan: __action, _external_id, _model, many2one memakai field_external_id, many2many memakai field_external_ids, custom field x_, dan update record lama bila external_id tersedia.\n\nBerikut export JSON-nya:\n\n${JSON.stringify(ctx,null,2).slice(0,180000)}`}
+$('openProjectExport').onclick=()=>goto(1);
+$('reloadProjects').onclick=async()=>{try{log('Muat daftar project.');const res=await post('ai_project_list',{query:$('projectSearch').value.trim(),limit:Number($('projectLimit').value||80),includeCounts:true});state.projects=res.projects.projects||[];renderProjectList();renderSelectedProject();log('Daftar project selesai.',{count:state.projects.length})}catch(e){log('Muat project gagal.',{error:e.message});alert(e.message)}};
+$('projectSearch').addEventListener('keydown',e=>{if(e.key==='Enter')$('reloadProjects').click()});
+$('exportProjectJson').onclick=async()=>{try{const p=selectedProject();if(!p)throw new Error('Pilih project dulu.');log('Export project JSON dimulai.',p);const res=await post('ai_project_context_export',{projectId:p.id,taskLimit:1200,messageLimit:160,includeSchema:true,includeMessages:true,includeUpdates:true});state.lastProjectContext=res.project_context;renderProjectTree(res.project_context);renderContext(res.project_context);log('Export project JSON selesai.',res.project_context.summary)}catch(e){log('Export project gagal.',{error:e.message});alert(e.message)}};
+$('exportProjectXlsx').onclick=async()=>{try{const p=selectedProject();if(!p)throw new Error('Pilih project dulu.');log('Export project XLSX dimulai.',p);const res=await post('ai_project_xlsx_export',{projectId:p.id,taskLimit:1200,messageLimit:160,includeMessages:true,includeUpdates:true});downloadBase64(res.export.filename,res.export.mime,res.export.base64);log('Export project XLSX selesai.',res.export.summary)}catch(e){log('Export project XLSX gagal.',{error:e.message});alert(e.message)}};
+$('downloadProjectJson').onclick=()=>state.lastProjectContext?downloadJson('lokalmart_project_context.json',state.lastProjectContext):alert('Belum ada export project JSON.');
+$('copyProjectPrompt').onclick=()=>state.lastProjectContext?copyText(makeProjectPrompt(state.lastProjectContext)):alert('Export JSON project dulu agar prompt lengkap bisa dicopy.');
 
-    function readTargets() {
-      try {
-        const raw = localStorage.getItem(TARGET_KEY);
-        const parsed = raw ? JSON.parse(raw) : [];
-        state.targets = Array.isArray(parsed) ? parsed : [];
-      } catch (err) {
-        state.targets = [];
-      }
-
-      state.activeTargetId = localStorage.getItem(ACTIVE_TARGET_KEY) || '';
-      if (!state.activeTargetId && state.targets[0]) {
-        state.activeTargetId = state.targets[0].id || state.targets[0].name || '';
-        localStorage.setItem(ACTIVE_TARGET_KEY, state.activeTargetId);
-      }
-      renderTargets();
-      renderTargetLabel();
-    }
-
-    function saveTargets() {
-      localStorage.setItem(TARGET_KEY, JSON.stringify(state.targets));
-      localStorage.setItem(ACTIVE_TARGET_KEY, state.activeTargetId || '');
-      renderTargets();
-      renderTargetLabel();
-    }
-
-    function getTarget() {
-      const found = state.targets.find(target => String(target.id || target.name) === String(state.activeTargetId));
-      if (found) return normalizeTarget(found);
-      if (state.targets[0]) return normalizeTarget(state.targets[0]);
-      return null;
-    }
-
-    function normalizeTarget(target) {
-      return {
-        id: target.id || target.name || uid(),
-        name: target.name || 'Odoo Lokalmart',
-        url: target.url || target.baseUrl || target.host || '',
-        db: target.db || target.database || '',
-        username: target.username || target.login || target.email || '',
-        password: target.password || target.apiKey || target.key || '',
-        apiKey: target.apiKey || target.password || target.key || '',
-      };
-    }
-
-    function activeTargetForApi() {
-      const target = getTarget();
-      if (!target || !target.url || !target.db || !target.username || !target.password) {
-        throw new Error('Target Odoo belum lengkap. Buka Target lalu isi URL, database, username, dan password/API key.');
-      }
-      return target;
-    }
-
-    function renderTargetLabel() {
-      const target = getTarget();
-      $('targetLabel').textContent = target ? `${target.name} · ${target.db || 'db kosong'}` : 'Target Odoo belum dipilih';
-    }
-
-    function renderTargets() {
-      const box = $('targetList');
-      if (!state.targets.length) {
-        box.innerHTML = '<div class="target-row"><strong>Belum ada target.</strong><small>Isi form di samping, lalu simpan.</small></div>';
-        return;
-      }
-
-      box.innerHTML = state.targets.map(raw => {
-        const target = normalizeTarget(raw);
-        const active = String(target.id) === String(state.activeTargetId);
-        return `
-          <div class="target-row ${active ? 'active' : ''}">
-            <strong>${escapeHtml(target.name)}</strong>
-            <small>${escapeHtml(target.url)} · DB: ${escapeHtml(target.db)} · User: ${escapeHtml(target.username)}</small>
-            <div class="row-actions">
-              <button class="pill green" type="button" data-use="${escapeAttr(target.id)}">Pakai</button>
-              <button class="pill" type="button" data-edit="${escapeAttr(target.id)}">Edit</button>
-              <button class="pill red" type="button" data-delete="${escapeAttr(target.id)}">Hapus</button>
-            </div>
-          </div>`;
-      }).join('');
-
-      box.querySelectorAll('[data-use]').forEach(button => {
-        button.addEventListener('click', () => {
-          state.activeTargetId = button.dataset.use;
-          saveTargets();
-          toast('Target aktif dipilih.');
-        });
-      });
-
-      box.querySelectorAll('[data-edit]').forEach(button => {
-        button.addEventListener('click', () => {
-          const target = state.targets.map(normalizeTarget).find(item => String(item.id) === String(button.dataset.edit));
-          if (!target) return;
-          $('targetName').value = target.name;
-          $('targetUrl').value = target.url;
-          $('targetDb').value = target.db;
-          $('targetUsername').value = target.username;
-          $('targetPassword').value = target.password;
-          state.activeTargetId = target.id;
-          saveTargets();
-          toast('Target dimuat ke form.');
-        });
-      });
-
-      box.querySelectorAll('[data-delete]').forEach(button => {
-        button.addEventListener('click', () => {
-          state.targets = state.targets.filter(item => String(item.id || item.name) !== String(button.dataset.delete));
-          if (String(state.activeTargetId) === String(button.dataset.delete)) {
-            state.activeTargetId = state.targets[0] ? (state.targets[0].id || state.targets[0].name) : '';
-          }
-          saveTargets();
-          toast('Target dihapus dari browser.');
-        });
-      });
-    }
-
-    function escapeHtml(value) {
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    function escapeAttr(value) {
-      return escapeHtml(value).replace(/`/g, '&#096;');
-    }
-
-    async function post(action, payload = {}) {
-      const target = activeTargetForApi();
-      const response = await fetch(API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, target, payload }),
-      });
-
-      const text = await response.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (err) {
-        throw new Error(`Server mengembalikan non-JSON. HTTP ${response.status}. ${text.slice(0, 500)}`);
-      }
-
-      if (!response.ok || data.ok === false) {
-        throw new Error(data.error || data.detail || `Request gagal HTTP ${response.status}`);
-      }
-
-      return data;
-    }
-
-    function renderAudit(audit) {
-      state.lastAudit = audit;
-      const counts = audit && audit.counts ? audit.counts : {};
-      $('criticalCount').textContent = counts.critical || 0;
-      $('highCount').textContent = counts.high || 0;
-      $('mediumCount').textContent = counts.medium || 0;
-      $('lowCount').textContent = counts.low || 0;
-
-      const issues = (audit && audit.issues ? audit.issues : []).slice(0, 40);
-      $('issueList').innerHTML = issues.length ? issues.map(issue => `
-        <div class="issue ${escapeAttr(issue.severity || 'low')}">
-          <strong>${escapeHtml((issue.severity || '').toUpperCase())} · ${escapeHtml(issue.area || '')} · ${escapeHtml(issue.model || '')}</strong>
-          <small>${escapeHtml(issue.message || '')}</small>
-          ${issue.name ? `<small>Record: ${escapeHtml(issue.name)} ${issue.id ? '#' + escapeHtml(issue.id) : ''}</small>` : ''}
-          ${issue.recommendation ? `<small>Rekomendasi: ${escapeHtml(issue.recommendation)}</small>` : ''}
-        </div>`).join('') : '<p>Tidak ada issue pada batas data yang dibaca.</p>';
-
-      const recs = audit && audit.recommendations ? audit.recommendations : [];
-      $('recommendationList').innerHTML = recs.length ? recs.map((item, index) => `
-        <div class="issue"><strong>${index + 1}. Rekomendasi</strong><small>${escapeHtml(item)}</small></div>`).join('') : '<p>Belum ada rekomendasi.</p>';
-
-      $('jsonBox').textContent = JSON.stringify(audit, null, 2).slice(0, 220000);
-      go(1);
-    }
-
-    function renderContext(context) {
-      state.lastContext = context;
-      $('jsonBox').textContent = JSON.stringify(context, null, 2).slice(0, 220000);
-      go(2);
-    }
-
-    function downloadText(filename, text, mime = 'application/json') {
-      const blob = new Blob([text], { type: mime + ';charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function downloadBase64(filename, base64, mime) {
-      const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
-      const blob = new Blob([bytes], { type: mime || 'application/octet-stream' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    async function runHealth() {
-      const res = await post('ai_health', {});
-      log('Health OK.', res.assistant);
-      toast('Target Odoo terhubung.');
-      return res.assistant;
-    }
-
-    async function runScan() {
-      try {
-        setBusy(true, 'Mulai scan struktur...');
-        log('Mulai scan struktur.');
-        const res = await post('ai_schema_scan', { limit: 500, fieldLimit: 1000 });
-        renderContext(res.scan);
-        log('Scan struktur selesai.', res.scan.summary);
-      } catch (err) {
-        log('Scan gagal.', { error: err.message });
-        alert(err.message);
-      } finally {
-        setBusy(false);
-      }
-    }
-
-    async function runAudit() {
-      try {
-        setBusy(true, 'Mulai audit data...');
-        log('Mulai audit data.');
-        const res = await post('ai_data_audit', { limit: 1000 });
-        renderAudit(res.audit);
-        state.lastContext = res.audit;
-        log('Audit selesai.', res.audit.counts);
-      } catch (err) {
-        log('Audit gagal.', { error: err.message });
-        alert(err.message);
-      } finally {
-        setBusy(false);
-      }
-    }
-
-    async function runContext() {
-      try {
-        setBusy(true, 'Mulai export context JSON...');
-        log('Mulai export konteks JSON.');
-        const res = await post('ai_context_export', { includeSchema: true, limit: 300, externalIdLimit: 1000 });
-        renderContext(res.context);
-        log('Export konteks selesai.', { models: Object.keys(res.context.datasets || {}).length });
-      } catch (err) {
-        log('Export konteks gagal.', { error: err.message });
-        alert(err.message);
-      } finally {
-        setBusy(false);
-      }
-    }
-
-    async function runXlsx() {
-      try {
-        setBusy(true, 'Membuat XLSX...');
-        log('Mulai export XLSX assistant.');
-        const res = await post('ai_export_xlsx', { limit: 1000, contextLimit: 300 });
-        downloadBase64(res.export.filename, res.export.base64, res.export.mime);
-        log('Export XLSX selesai.', res.export.summary);
-        toast('XLSX berhasil dibuat.');
-      } catch (err) {
-        log('Export XLSX gagal.', { error: err.message });
-        alert(err.message);
-      } finally {
-        setBusy(false);
-      }
-    }
-
-    $('btnSettings').addEventListener('click', () => go(3));
-    $('prevBtn').addEventListener('click', () => go(state.slide - 1));
-    $('nextBtn').addEventListener('click', () => go(state.slide + 1));
-    $('btnScan').addEventListener('click', runScan);
-    $('btnAudit').addEventListener('click', runAudit);
-    $('btnContext').addEventListener('click', runContext);
-    $('btnXlsx').addEventListener('click', runXlsx);
-    $('btnReloadTargets').addEventListener('click', readTargets);
-    $('btnClearLog').addEventListener('click', () => { $('logBox').textContent = 'Log dibersihkan.'; });
-
-    $('btnDownloadAudit').addEventListener('click', () => {
-      if (!state.lastAudit) return toast('Belum ada audit.');
-      downloadText(`lokalmart_audit_${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(state.lastAudit, null, 2));
-    });
-
-    $('btnDownloadContext').addEventListener('click', () => {
-      const data = state.lastContext || state.lastAudit;
-      if (!data) return toast('Belum ada context.');
-      downloadText(`lokalmart_context_${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(data, null, 2));
-    });
-
-    $('btnCopy').addEventListener('click', async () => {
-      const text = $('jsonBox').textContent || '';
-      if (!text || text === 'Belum ada export.') return toast('Belum ada isi untuk dicopy.');
-      await navigator.clipboard.writeText(text);
-      toast('JSON dicopy ke clipboard.');
-    });
-
-    $('btnTest').addEventListener('click', async () => {
-      try {
-        setBusy(true, 'Tes koneksi...');
-        const result = await runHealth();
-        log('Tes koneksi selesai.', result);
-      } catch (err) {
-        log('Tes koneksi gagal.', { error: err.message });
-        alert(err.message);
-      } finally {
-        setBusy(false);
-      }
-    });
-
-    $('targetForm').addEventListener('submit', (event) => {
-      event.preventDefault();
-      const existingId = state.activeTargetId || uid();
-      const target = {
-        id: existingId,
-        name: $('targetName').value.trim() || 'Odoo Lokalmart',
-        url: $('targetUrl').value.trim().replace(/\/+$/, ''),
-        db: $('targetDb').value.trim(),
-        username: $('targetUsername').value.trim(),
-        password: $('targetPassword').value,
-        apiKey: $('targetPassword').value,
-      };
-
-      if (!target.url || !target.db || !target.username || !target.password) {
-        alert('Lengkapi URL, database, username, dan password/API key.');
-        return;
-      }
-
-      const index = state.targets.findIndex(item => String(item.id || item.name) === String(existingId));
-      if (index >= 0) state.targets[index] = target;
-      else state.targets.push(target);
-      state.activeTargetId = target.id;
-      saveTargets();
-      toast('Target disimpan.');
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowLeft') go(state.slide - 1);
-      if (event.key === 'ArrowRight') go(state.slide + 1);
-    });
-
-    readTargets();
-    go(0);
-    log('Asisten siap. Pilih target, lalu jalankan Scan/Audit/Export.');
-  </script>
+$('clearLog').onclick=()=>{$('log').textContent='Siap.'};
+renderDots();loadTargets();log('Asisten siap. Fitur baru: Export Project Terpilih.');
+</script>
 </body>
 </html>

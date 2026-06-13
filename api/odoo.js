@@ -11,6 +11,9 @@ const {
   buildContextExport,
   buildDataAudit,
   buildAssistantXlsxExport,
+  listProjectsForAssistant,
+  buildProjectContextExport,
+  buildProjectXlsxExport,
   readOnlyRpc,
 } = require('../lib/aiStudio');
 
@@ -47,23 +50,19 @@ module.exports = async function handler(req, res) {
       const odoo = new OdooClient(target);
       const uid = await odoo.authenticate();
       let version = null;
-      try {
-        version = await odoo.version();
-      } catch (_) {}
+      try { version = await odoo.version(); } catch (_) {}
       return sendJson(res, 200, { ok: true, uid, version });
     }
 
     if (action === 'import_sheet_batch' || action === 'import_native_sheet_batch') {
       const odoo = new OdooClient(target);
       await odoo.authenticate();
-
       const { sheet, model, rows, total, offset, limit } = getRowsForSheet(
         payload.fileBase64,
         payload.sheet,
         payload.offset || 0,
         payload.limit || 50,
       );
-
       const report = await importSheetBatch({
         odoo,
         sheet,
@@ -72,7 +71,6 @@ module.exports = async function handler(req, res) {
         mode: action === 'import_native_sheet_batch' ? 'super_fast' : payload.mode || 'normal',
         options: payload.options || {},
       });
-
       return sendJson(res, 200, {
         ok: true,
         sheet,
@@ -89,21 +87,13 @@ module.exports = async function handler(req, res) {
     if (action === 'import_product_images_batch') {
       const odoo = new OdooClient(target);
       await odoo.authenticate();
-
       const { sheet, rows, total, offset, limit } = getRowsForSheet(
         payload.fileBase64,
         payload.sheet || 'photo_import_queue',
         payload.offset || 0,
         payload.limit || 10,
       );
-
-      const report = await importPhotoBatch({
-        odoo,
-        sheet,
-        rows,
-        options: payload.options || {},
-      });
-
+      const report = await importPhotoBatch({ odoo, sheet, rows, options: payload.options || {} });
       return sendJson(res, 200, {
         ok: true,
         sheet,
@@ -146,6 +136,24 @@ module.exports = async function handler(req, res) {
       const odoo = new OdooClient(target);
       await odoo.authenticate();
       return sendJson(res, 200, { ok: true, export: await buildAssistantXlsxExport(odoo, payload) });
+    }
+
+    if (action === 'ai_project_list') {
+      const odoo = new OdooClient(target);
+      await odoo.authenticate();
+      return sendJson(res, 200, { ok: true, projects: await listProjectsForAssistant(odoo, payload) });
+    }
+
+    if (action === 'ai_project_context_export') {
+      const odoo = new OdooClient(target);
+      await odoo.authenticate();
+      return sendJson(res, 200, { ok: true, project_context: await buildProjectContextExport(odoo, payload) });
+    }
+
+    if (action === 'ai_project_xlsx_export') {
+      const odoo = new OdooClient(target);
+      await odoo.authenticate();
+      return sendJson(res, 200, { ok: true, export: await buildProjectXlsxExport(odoo, payload) });
     }
 
     if (action === 'ai_read_rpc') {

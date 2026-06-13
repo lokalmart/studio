@@ -1,38 +1,15 @@
 {
   "version": 2,
+  "rewrites": [
+    { "source": "/assistant", "destination": "/public/assistant.html" },
+    { "source": "/assistant/", "destination": "/public/assistant.html" },
+    { "source": "/ai", "destination": "/public/assistant.html" },
+    { "source": "/ai/", "destination": "/public/assistant.html" },
+    { "source": "/", "destination": "/public/index.html" }
+  ],
   "functions": {
     "api/odoo.js": {
-      "maxDuration": 60,
-      "memory": 1024
+      "maxDuration": 60
     }
-  },
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/public/index.html"
-    },
-    {
-      "source": "/assistant",
-      "destination": "/public/assistant.html"
-    },
-    {
-      "source": "/ai",
-      "destination": "/public/assistant.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "no-referrer"
-        }
-      ]
-    }
-  ]
+  }
 }
